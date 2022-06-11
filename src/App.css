@@ -75,6 +75,7 @@ li {
 }
 
 li {
+  list-style-type: none;
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -86,4 +87,52 @@ li {
 
 .active-li > ul {
   display: block;
+}
+
+.footerComp {
+  position: relative;
+}
+
+.footerComp > nav {
+  background-color: rgb(250, 248, 248);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  display: flex;
+  padding: 5px;
+  color: #444;
+  border-bottom: 2px solid #aaa5;
+  justify-content: space-between;
+}
+
+.footerComp > nav > .tabs a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: #444;
+}
+
+.footerComp > nav > .controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 50px;
+}
+
+.footerComp > nav > .controls span {
+  text-decoration: none;
+  color: #444;
+  padding: 0;
+}
+
+.maximize {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: calc(100vw - 30px);
+  height: calc(100vh - 30px);
+  background-color: #fafafa;
+  border-radius: 5px;
+  box-shadow: 0 0 4px #aaa;
+  z-index: 100;
+  transition: 500ms;
 }

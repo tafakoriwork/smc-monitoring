@@ -1,3 +1,5 @@
+import { faFileAlt, faFolderClosed } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createRef, useEffect, useRef } from "react";
 
 function TreeMenu(props) {
@@ -8,6 +10,7 @@ function TreeMenu(props) {
         <ul>
           {children.map((child, j) => (
             <li key={j}>
+              <FontAwesomeIcon icon={faFileAlt} size="xs" style={{ marginRight: '5px'}}/>
               {child.id}
               {childRender(child.children)}
             </li>
@@ -33,6 +36,7 @@ function TreeMenu(props) {
         {props.data.map((el, i) => {
           return (
             <li key={i} ref={menuItems[el.id]} onClick={Toggle}>
+              <FontAwesomeIcon icon={faFolderClosed} size="xs" style={{ marginRight: '5px'}}/>
               {el.id}
               {childRender(el.children)}
             </li>
