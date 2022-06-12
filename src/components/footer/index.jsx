@@ -11,8 +11,8 @@ function FooterUI(props) {
     <div className="footerComp" ref={footer}>
         <nav>
           <div className="tabs">
-            <a href="#" onClick={() => setCurrentTab('tasks')} style={ currentTab == 'tasks' ? { borderBottom: '2px solid brown'} : {} }>Tasks</a>
-            <a href="#" onClick={() => setCurrentTab('events')} style={ currentTab == 'events' ? { borderBottom: '2px solid brown'} : {} }>Events</a>
+            <a href="#tasks" onClick={() => setCurrentTab('tasks')} style={ currentTab === 'tasks' ? { borderBottom: '2px solid darkblue'} : {} }>Tasks</a>
+            <a href="#events" onClick={() => setCurrentTab('events')} style={ currentTab === 'events' ? { borderBottom: '2px solid darkblue'} : {} }>Events</a>
           </div>
           <div className="controls">
             <span>
@@ -30,9 +30,9 @@ function FooterUI(props) {
         </nav>
         <div style={{ paddingTop: "50px" }}>
           {
-              currentTab == 'tasks'
+              currentTab === 'tasks'
               ? <Tasks />
-              : <Events />
+              : <Events />  
           }
         </div>
     </div>

@@ -1,19 +1,25 @@
 import TreeMenu from "../tools/TreeMenu";
+import { useDispatch, useSelector } from 'react-redux';
+import { currentPanel, setPanel, setPanelTab } from "../redux/routingSlice";
 
 function BrowserMenu() {
+    const dispatch = useDispatch();
+    const current = useSelector(currentPanel);
+    const dispatcher = async (id) => dispatch(setPanel(id));
+    const dispatcherTab = async (id) => dispatch(setPanelTab(id));
     const data = [
         {
-            id: 'root',
-            children: [{id: 'amir'}]
+            id: 'Monitoring',
+            children: [{id: 'CPU'}, {id: 'RAM'}]
         },
         {
-            id: 'root2',
-            children: [{id: 'amir2', children: [{id: 'amirchild',children: [{id: 'amirchild2',}]}]}]
+            id: 'Management',
+            children: [{id: 'Setting'}]
         }
     ]
     return (
         <>
-            <TreeMenu data={data}/>
+            <TreeMenu data={data} selector={dispatcher} selectorTab={dispatcherTab} current={current} />
         </>
     )
 }
