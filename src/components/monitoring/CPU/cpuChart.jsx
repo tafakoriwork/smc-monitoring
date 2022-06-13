@@ -1,38 +1,55 @@
-
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { VictoryChart, VictoryLine, VictoryTheme } from "victory";
 
 function VChart() {
-  const [datad, setData] = useState([
-    {x: 0, y:0}
-  ]);
-  let i = 0;
-
+  const [datad, setData] = useState([{ x: 0, y: 0 }]);
   const smcRequest = () => {
-    fetch('http://172.30.5.131/smc-monitoringlaravel/public/')
-    .then(function(response) {
-          return response.json();   
-  
-        }).then(data => {
-        if(data) {
-        const newval = {x: Math.floor(data['cpu usage']), y: Math.floor(data['cpu current speed'])}
-        setData(datad=> [...datad, newval]);
-      }
+    axios
+      .get("http://192.168.101.32/smsAPI/")
+      .then((response) => response.data)
+      .then((ndata) => {
+        if(datad.length > 8)
+        {
+          let newarr = datad;
+          newarr = newarr.shift();
+          setData(newarr);
+        }
+        else
+        setData((datad) => [
+          ...datad,
+          { x: ndata["cpu usage"], y: ndata["cpu current speed"] },
+        ]);
       })
+      .catch((error) => {
+        const ndata = error.response.data;
+        if(datad.length > 8)
+        {
+          let newarr = [...datad];
+          newarr = newarr.shift();
+          console.log([newarr]);
+        }
+        else
+        setData((datad) => [
+          ...datad,
+          { x: ndata["cpu usage"], y: ndata["cpu current speed"] },
+        ]);
+      });
   };
-  
-setInterval(() => {
+
   smcRequest();
-}, 4000);
+  setInterval(() => {
+    smcRequest();
+  }, 20000);
   return (
     <VictoryChart theme={VictoryTheme.material}>
       <VictoryLine
+        domain={{  y: [1.8, 4] }}
         animate={{
           duration: 500,
-          onLoad: { duration: 300 },
         }}
         style={{
-          data: { stroke: "#c43a31" },
+          data: { stroke: "darkblue", strokeWidth: 0.4, },
           parent: { border: "1px solid #ccc" },
         }}
         data={datad}

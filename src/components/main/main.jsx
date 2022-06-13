@@ -4,8 +4,8 @@ import BrowserMenu from "../browser";
 import FooterUI from "../footer";
 import Navbar from "../navbar";
 import Monitoring from "../monitoring";
-import { useSelector, useDispatch } from "react-redux";
-import { currentPanel, currentPanelTab, setPanel } from "../redux/routingSlice";
+import { useSelector } from "react-redux";
+import { currentPanel, currentPanelTab } from "../redux/routingSlice";
 import Management from "../management";
 
 function Main() {
@@ -51,10 +51,10 @@ function Main() {
           <Pane className={"pane text-start overflow-auto"} initialSize="5%">
             <BrowserMenu />
           </Pane>
-          <Pane className={"pane h-100 overflow-auto"}>
+          <Pane className={"pane h-100 overflow-auto"} >
             {current} - {currentTab}
-            {current == "Monitoring" && <Monitoring />}
-            {current == "Management" && <Management />}
+            {current === "Monitoring" && <Monitoring />}
+            {current === "Management" && <Management />}
           </Pane>
         </SplitPane>
         <Pane className={"pane"}>
