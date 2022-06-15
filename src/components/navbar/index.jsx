@@ -13,10 +13,10 @@ function Navbar() {
       }}
     >
       <a className="navbar-brand text-light" href="#">
-        <div>Navbar</div>
+        <div>SMC-SL</div>
       </a>
       <div className="position-relative">
-          <textarea className="bg-secondary resize-none srch-box" placeholder="search..."></textarea>
+          <textarea className="bg-secondary resize-none srch-box" style={{ color: '#aaa'}} placeholder="search..."></textarea>
           <FontAwesomeIcon className="srch-icon position-absolute" icon={ faSearch } />
       </div>
     </nav>

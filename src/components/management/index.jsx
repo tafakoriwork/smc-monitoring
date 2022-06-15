@@ -1,6 +1,7 @@
 function Management() {
     return (
         <>
+        <br />
         Management
         </>
     );

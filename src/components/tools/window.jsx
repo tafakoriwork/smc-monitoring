@@ -19,7 +19,7 @@ function Window(props) {
   return (
     <>
       {!closed && (
-        <div className="col-md-4 p-2 smoothmove" ref={el}>
+        <div className="col-md-6 p-2 smoothmove" ref={el}>
           <div
             className={
               minimize ? "card card-default" : "card card-default h-100"

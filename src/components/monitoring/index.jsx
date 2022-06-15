@@ -12,16 +12,16 @@ function Monitoring() {
     <div>
       <div className="row tabbar" style={{ height: "36px" }}>
         <div
-          className={isCurrent("CPU") ? "col-1 tab activeTab" : "col-1 tab"}
+          className={isCurrent("CPU") ? "col-md-1 col-3 tab activeTab" : "col-md-1 col-3 tab"}
           onClick={() => dispatch(setPanelTab("CPU"))}
         >
-          cpu
+          CPU
         </div>
         <div
-          className={isCurrent("RAM") ? "col-1 tab activeTab" : "col-1 tab"}
+          className={isCurrent("RAM") ? "col-md-1 col-3 tab activeTab" : "col-md-1 col-3 tab"}
           onClick={() => dispatch(setPanelTab("RAM"))}
         >
-          ram
+          RAM
         </div>
       </div>
       <div className="row h-100 px-4">

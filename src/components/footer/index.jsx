@@ -28,7 +28,7 @@ function FooterUI(props) {
             </span>
           </div>
         </nav>
-        <div style={{ paddingTop: "50px" }}>
+        <div style={{ paddingTop: "35px" }}>
           {
               currentTab === 'tasks'
               ? <Tasks />

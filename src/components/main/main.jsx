@@ -7,6 +7,8 @@ import Monitoring from "../monitoring";
 import { useSelector } from "react-redux";
 import { currentPanel, currentPanelTab } from "../redux/routingSlice";
 import Management from "../management";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 function Main() {
   const current = useSelector(currentPanel);
@@ -52,7 +54,11 @@ function Main() {
             <BrowserMenu />
           </Pane>
           <Pane className={"pane h-100 overflow-auto"} >
-            {current} - {currentTab}
+            <div className="row m-0 bg-light pt-1 align-items-center">
+              <h5 style={{fontSize: '12px', color: '#999'}}>
+              {current} {currentTab && <FontAwesomeIcon icon={faChevronRight} size={'xs'} style={{color: '#999'}} />} {currentTab}
+              </h5>
+            </div>
             {current === "Monitoring" && <Monitoring />}
             {current === "Management" && <Management />}
           </Pane>
