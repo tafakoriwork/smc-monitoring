@@ -12,14 +12,14 @@ function Window(props) {
   const { body_ui, title } = props;
   const [minimize, setMinimize] = useState(false);
   const [closed, setClosed] = useState(false);
-  const set_minimize = () => {
+  const set_minimize = async () => {
     setMinimize(!minimize);
     el.current.classList.remove("maximize");
   };
   return (
     <>
       {!closed && (
-        <div className="col-md-6 p-2 smoothmove" ref={el}>
+        <div className="col-md-12 p-2 smoothmove" ref={el}>
           <div
             className={
               minimize ? "card card-default" : "card card-default h-100"
@@ -37,7 +37,7 @@ function Window(props) {
                   onClick={() => set_minimize()}
                   className="mx-2 c-pointer"
                 />
-                <Maximize el={el} />
+                <Maximize el={el} minimize={ minimize } toggle_minimize={set_minimize} />
                 <FontAwesomeIcon
                   onClick={() => setClosed(!closed)}
                   icon={faTimes}

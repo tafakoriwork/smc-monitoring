@@ -3,24 +3,27 @@ import { createSlice } from '@reduxjs/toolkit'
 export const routingSlice = createSlice({
   name: 'routing',
   initialState: {
-    panel: "Monitoring",
-    panelTab: null,
+    panel: null,
+    managementPanelTab: "Setting",
+    monitoringPanelTab: "CPU",
   },
   reducers: {
     setPanel: (state, action) => {
         state.panel = action.payload
-        state.panelTab = null
     },
-
-    setPanelTab: (state, action) => {
-        state.panelTab = action.payload
+    setMonitoringPanelTab: (state, action) => {
+        state.monitoringPanelTab = action.payload
+    },
+    setManagementPanelTab: (state, action) => {
+        state.managementPanelTab = action.payload
     },
   },
 })
 
-export const { setPanel, setPanelTab } = routingSlice.actions
+export const { setPanel, setMonitoringPanelTab, setManagementPanelTab } = routingSlice.actions
 
 export const currentPanel = (state) => state.routing.panel
-export const currentPanelTab = (state) => state.routing.panelTab
+export const MonitoringCurrentPanel = (state) => state.routing.monitoringPanelTab
+export const ManagementCurrentPanel = (state) => state.routing.managementPanelTab
 
 export default routingSlice.reducer

@@ -94,7 +94,7 @@ li {
   position: relative;
 }
 
-.footerComp > nav {
+.footerComp > .nav {
   background-color: rgb(250, 248, 248);
   position: absolute;
   top: 0;
@@ -103,23 +103,23 @@ li {
   padding: 5px;
   color: #444;
   border-bottom: 2px solid #aaa5;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
-.footerComp > nav > .tabs a {
+.footerComp > .nav > .tabs a {
   margin-left: 15px;
   text-decoration: none;
   color: #444;
 }
 
-.footerComp > nav > .controls {
+.footerComp > .nav > .controls {
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 50px;
 }
 
-.footerComp > nav > .controls span {
+.footerComp > .nav > .controls span {
   text-decoration: none;
   color: #444;
   padding: 0;

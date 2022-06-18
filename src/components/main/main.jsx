@@ -5,14 +5,12 @@ import FooterUI from "../footer";
 import Navbar from "../navbar";
 import Monitoring from "../monitoring";
 import { useSelector } from "react-redux";
-import { currentPanel, currentPanelTab } from "../redux/routingSlice";
+import { currentPanel, ManagementCurrentPanel, MonitoringCurrentPanel } from "../redux/routingSlice";
 import Management from "../management";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 function Main() {
-  const current = useSelector(currentPanel);
-  const currentTab = useSelector(currentPanelTab);
+  const currentManagementTab = useSelector(currentPanel);
+  const currentTab = useSelector(MonitoringCurrentPanel);
   const firstrow = useRef(null);
 
   async function Minimize() {
@@ -32,11 +30,11 @@ function Main() {
         ref={firstrow}
         style={{ marginTop: "60px" }}
         split="horizontal"
-        minSize={"calc(80% - 60px"}
+        minSize={"calc(80% - 60px)"}
         defaultSize={
           localStorage.getItem("allhorizontal")
             ? parseInt(localStorage.getItem("allhorizontal"), 10)
-            : "calc(80% - 60px"
+            : "calc(80% - 60px)"
         }
         onChange={(size) => localStorage.setItem("allhorizontal", size)}
       >
@@ -53,19 +51,24 @@ function Main() {
           <Pane className={"pane text-start overflow-auto"} initialSize="5%">
             <BrowserMenu />
           </Pane>
-          <Pane className={"pane h-100 overflow-auto"} >
-            <div className="row m-0 bg-light pt-1 align-items-center">
-              <h5 style={{fontSize: '12px', color: '#999'}}>
-              {current} {currentTab && <FontAwesomeIcon icon={faChevronRight} size={'xs'} style={{color: '#999'}} />} {currentTab}
-              </h5>
-            </div>
-            {current === "Monitoring" && <Monitoring />}
-            {current === "Management" && <Management />}
-          </Pane>
+          <SplitPane
+            split="vertical"
+            defaultSize={
+              localStorage.getItem("insideSize")
+                ? parseInt(localStorage.getItem("insideSize"), 10)
+                : "15%"
+            }
+            onChange={(size) => localStorage.setItem("insideSize", size)}
+          >
+            <Pane className={"pane h-100 overflow-auto"}>
+              <Monitoring current_tab={useSelector(MonitoringCurrentPanel)} />
+            </Pane>
+            <Pane className={"pane h-100 overflow-auto"}>
+              <Management current_tab={useSelector(ManagementCurrentPanel)} />
+            </Pane>
+          </SplitPane>
         </SplitPane>
-        <Pane className={"pane"}>
           <FooterUI minimize={Minimize} />
-        </Pane>
       </SplitPane>
     </div>
   );

@@ -4,38 +4,24 @@ import { useRef, useState } from "react";
 import Maximize from "../tools/Maximize";
 import Tasks from "./tasks";
 import Events from "./events";
+import SplitPane, { Pane } from "react-split-pane";
 function FooterUI(props) {
   const footer = useRef(null);
-  const [currentTab, setCurrentTab] = useState('tasks');
+  const [currentTab, setCurrentTab] = useState("tasks");
   return (
-    <div className="footerComp" ref={footer}>
-        <nav>
-          <div className="tabs">
-            <a href="#tasks" onClick={() => setCurrentTab('tasks')} style={ currentTab === 'tasks' ? { borderBottom: '2px solid darkblue'} : {} }>Tasks</a>
-            <a href="#events" onClick={() => setCurrentTab('events')} style={ currentTab === 'events' ? { borderBottom: '2px solid darkblue'} : {} }>Events</a>
-          </div>
-          <div className="controls">
-            <span>
-              <FontAwesomeIcon
-                style={{ cursor: "pointer" }}
-                onClick={() => props.minimize()}
-                size="xs"
-                icon={faWindowMinimize}
-              />
-            </span>
-            <span>
-              <Maximize el={footer} />
-            </span>
-          </div>
-        </nav>
-        <div style={{ paddingTop: "35px" }}>
-          {
-              currentTab === 'tasks'
-              ? <Tasks />
-              : <Events />  
-          }
-        </div>
-    </div>
+    <SplitPane ref={ footer } defaultSize={
+      localStorage.getItem("footersize")
+        ? parseInt(localStorage.getItem("footersize"), 10)
+        : "15%"
+    }
+    onChange={(size) => localStorage.setItem("footersize", size)}>
+      <Pane className={"pane"}>
+        <Tasks />
+      </Pane>
+      <Pane className={"pane"}>
+        <Events />
+      </Pane>
+    </SplitPane>
   );
 }
 

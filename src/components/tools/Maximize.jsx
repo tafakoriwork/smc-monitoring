@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Maximize(props) {
   function toggle () {
+    if(props.minimize)
+      props.toggle_minimize();
       const el = props.el.current;
       el.classList.contains('maximize')
       ? el.classList.remove('maximize')

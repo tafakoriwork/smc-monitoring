@@ -6,10 +6,10 @@ import FooterUI from "../footer";
 import Management from "../management";
 import Monitoring from "../monitoring";
 import Navbar from "../navbar";
-import { currentPanel, currentPanelTab } from "../redux/routingSlice";
+import { currentPanel, MonitoringCurrentPanel } from "../redux/routingSlice";
 function MainMobile() {
   const current = useSelector(currentPanel);
-  const currentTab = useSelector(currentPanelTab);
+  const currentTab = useSelector(MonitoringCurrentPanel);
   const firstrow = useRef(null);
   async function Minimize() {
     firstrow.current.pane1.style.height >= "80%" &&
