@@ -49,7 +49,9 @@ function VChart() {
             dispatch(shiftspeedInformation());
           }
         }
-          setReload(Math.random());
+          setTimeout(() => {
+            setReload(Math.random());
+          }, 4000);
       })
       .catch((error) => {
         const ndata = error;
