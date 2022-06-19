@@ -1,9 +1,10 @@
 import TreeMenu from "../tools/TreeMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { currentPanel } from "../redux/routingSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronCircleLeft, faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 
-function BrowserMenu() {
-  const dispatch = useDispatch();
+function BrowserMenu(props) {
   const current = useSelector(currentPanel);
   const data = [
     {
@@ -31,12 +32,15 @@ function BrowserMenu() {
     },
   ];
   return (
-    <>
+    <div className="h-100">
       <TreeMenu
         data={data}
         current={current}
       />
-    </>
+      <div className="collapsing" onClick={ () => props.toggle_browser() }>
+      <FontAwesomeIcon icon={ props.width < 25 ? faChevronCircleRight : faChevronCircleLeft } color={'#aaa'} />
+      </div>
+    </div>
   );
 }
 

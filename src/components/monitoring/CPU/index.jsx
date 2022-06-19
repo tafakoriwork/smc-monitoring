@@ -6,7 +6,7 @@ function CPU() {
   return (
     <>
       <Window body_ui={<VChart />} title={"CPU usage"} />
-     <Window body_ui={<CPUSpeed />} title={"CPU Current Speed"} /> 
+      <Window body_ui={<CPUSpeed />} title={"CPU Current Speed"} />
     </>
   );
 }
