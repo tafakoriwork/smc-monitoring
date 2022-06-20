@@ -30,5 +30,4 @@ export const { setInformation, shiftInformation, shiftspeedInformation, setspeed
 
 export const information = (state) => state.cpu.information;
 export const speedInformation = (state) => state.cpu.speedInformation;
-
 export default cpuStates.reducer;

@@ -8,16 +8,12 @@ function App() {
     setwidth(window.innerWidth);
   }
   useEffect(() => {
-    window.addEventListener('resize', handelWindowSizeChange);
+    window.addEventListener("resize", handelWindowSizeChange);
     return () => {
-      window.removeEventListener('resize', handelWindowSizeChange);
+      window.removeEventListener("resize", handelWindowSizeChange);
     };
   }, []);
-  return (
-    <div className="App">
-     {width <= 768 ? <MainMobile /> : <Main />}
-    </div>
-  );
+  return <div className="App">{width <= 768 ? <MainMobile /> : <Main />}</div>;
 }
 
 export default App;

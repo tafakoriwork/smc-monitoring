@@ -18,10 +18,11 @@ function Main() {
   const [Width, setWidth] = useState(
     parseInt(localStorage.getItem("allhorizontal"), 10)
   );
+
   async function Minimize() {
     firstrow.current.pane1.style.height >= "80%" &&
-    firstrow.current.pane1.style.height !== "calc(100% - 100px)"
-      ? (firstrow.current.pane1.style.height = "calc(100% - 100px)")
+    firstrow.current.pane1.style.height !== "calc(100% - 35px)"
+      ? (firstrow.current.pane1.style.height = "calc(100% - 35px)")
       : (firstrow.current.pane1.style.height = "80%");
     const maximizes = document.getElementsByClassName("maximize");
     for (let i = 0; i <= maximizes.length; i++)

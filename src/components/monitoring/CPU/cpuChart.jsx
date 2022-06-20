@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
+import global from "../../config/global";
 import {
   information,
   setInformation,
@@ -10,22 +11,26 @@ import {
   shiftspeedInformation,
   speedInformation,
 } from "../../redux/cpuStates";
-
+import {
+  nodeIp,
+} from "../../redux/routingSlice";
 function VChart() {
   const [reload, setReload] = useState(0);
   var d = new Date();
   const dispatch = useDispatch();
   const inf = useSelector(information);
   const speedinf = useSelector(speedInformation);
+  const nodeIP = useSelector(nodeIp);
   const smcRequest = () => {
+    console.log(nodeIP);
     axios
       .get("https://172.30.5.125/smc-sl/api/v1/oshw/cpu/0", {
         headers: {
-          username: "morsa",
-          password: "p@ss@ceph",
-          address: "172.30.6.45",
+          username: global.username,
+          password: global.password,
+          address: nodeIP,
           Authorization:
-            "Bearer mTiEMSctlXyavwqZ4QbPdVsYp6CrJB9GUAkogfuKzHDW28hn1xL7ROIeNF3j5",
+            `Bearer ${global.token}`,
         },
       })
       .then((response) => response.data)
