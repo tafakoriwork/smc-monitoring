@@ -4,8 +4,8 @@ export const routingSlice = createSlice({
   name: "routing",
   initialState: {
     panel: null,
-    managementPanelTab: "Setting",
-    monitoringPanelTab: "CPU",
+    managementPanelTab: null,
+    monitoringPanelTab: null,
     nodeIp: null,
   },
   reducers: {
