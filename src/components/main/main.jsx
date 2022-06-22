@@ -7,13 +7,14 @@ import Monitoring from "../monitoring";
 import { useSelector } from "react-redux";
 import {
   ManagementCurrentPanel,
-  MonitoringCurrentPanel,
+  selectedBrowser,
 } from "../redux/routingSlice";
 import Management from "../management";
 
 function Main() {
   const firstrow = useRef(null);
   const browserRow = useRef(null);
+  const selected_browser = useSelector(selectedBrowser);
   const [isCollapse, setIsCollapse] = useState(true);
   const [Width, setWidth] = useState(
     parseInt(localStorage.getItem("allhorizontal"), 10)
@@ -79,7 +80,7 @@ function Main() {
             onChange={(size) => localStorage.setItem("insideSize", size)}
           >
             <Pane className={"pane overflow-hidden h-100"}>
-              <Monitoring current_tab={useSelector(MonitoringCurrentPanel)} />
+              <Monitoring current_tab={selected_browser}/>
             </Pane>
             <Pane className={"pane overflow-hidden h-100"}>
               <Management current_tab={useSelector(ManagementCurrentPanel)} />

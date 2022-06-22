@@ -1,12 +1,15 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nodeIp, setMonitoringPanelTab } from "../redux/routingSlice";
+import { nodeIp, setSelectedBrowser } from "../redux/routingSlice";
 import CPU from "./CPU";
 import RAM from "./RAM";
+import NIDs from "./NIDs";
 function Monitoring(props) {
   const dispatch = useDispatch();
-  const isCurrent = (tab) => props.current_tab === tab;
+  const isCurrent = (tab) => props.current_tab.title === tab;
+  const nodes =props.current_tab;
   const node_ip = useSelector(nodeIp);
   return (
     <div className="h-100 overflow-hidden">
@@ -31,29 +34,26 @@ function Monitoring(props) {
             )}{" "}
             {node_ip}
             {" "}
-            {props.current_tab && (
+            {props.current_tab.title && (
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={"xs"}
                 style={{ color: "#999" }}
               />
             )}{" "}
-            {props.current_tab}
+            {props.current_tab.title}
           </h5>
         </div>
         <div className="row tabbar" style={{ height: "36px" }}>
-          <div
-            className={isCurrent("CPU") ? "col tab activeTab" : "col tab"}
-            onClick={() => dispatch(setMonitoringPanelTab("CPU"))}
+          { nodes?.children ? nodes.children?.map((el, i) => (
+            <div
+            key={i}
+            className={isCurrent(el.title) ? "col tab activeTab" : "col tab"}
+            onClick={() => dispatch(setSelectedBrowser(el))}
           >
-            CPU
+            {el.title}
           </div>
-          <div
-            className={isCurrent("RAM") ? "col tab activeTab" : "col tab"}
-            onClick={() => dispatch(setMonitoringPanelTab("RAM"))}
-          >
-            RAM
-          </div>
+          )) : (<center>{props.current_tab.title}</center>)}
         </div>
       </div>
 
@@ -61,8 +61,9 @@ function Monitoring(props) {
         className="row px-4 overflow-auto h-100"
         style={{ paddingBottom: "70px" }}
       >
-        {isCurrent("CPU") && <CPU />}
-        {isCurrent("RAM") && <RAM />}
+        {isCurrent("CPUs") && <CPU />}
+        {isCurrent("HDDs") && <RAM />}
+        {isCurrent("NICs") && <NIDs />}
       </div>
     </div>
   );

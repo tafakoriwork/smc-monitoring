@@ -62,7 +62,7 @@
 }
 
 .active-ul {
-  display: block;
+  display: block !important;
 }
 
 ul {
@@ -88,6 +88,7 @@ li {
 .active-li > ul {
   display: block;
 }
+
 .footerComp > .nav {
   background-color: rgb(250, 248, 248);
   position: absolute;
@@ -202,4 +203,8 @@ li {
 
 .overflow-hidden {
   overflow: hidden !important;
+}
+
+ul {
+  padding-left: 1em !important;
 }

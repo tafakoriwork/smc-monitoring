@@ -12,6 +12,7 @@ import {
   speedInformation,
 } from "../../redux/cpuStates";
 import {
+  currentCluster,
   nodeIp,
 } from "../../redux/routingSlice";
 function VChart() {
@@ -21,10 +22,10 @@ function VChart() {
   const inf = useSelector(information);
   const speedinf = useSelector(speedInformation);
   const nodeIP = useSelector(nodeIp);
+  const cluster = useSelector(currentCluster);
   const smcRequest = () => {
-    console.log(nodeIP);
     axios
-      .get("https://172.30.5.125/smc-sl/api/v1/oshw/cpu/0", {
+      .get(`${cluster}/smc-sl/api/v1/oshw/cpu/0`, {
         headers: {
           username: global.username,
           password: global.password,
@@ -54,9 +55,7 @@ function VChart() {
             dispatch(shiftspeedInformation());
           }
         }
-          setTimeout(() => {
             setReload(Math.random());
-          }, 4000);
       })
       .catch((error) => {
         const ndata = error;

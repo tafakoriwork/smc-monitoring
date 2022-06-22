@@ -1,17 +1,15 @@
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setInformation, setspeedInformation } from "../redux/cpuStates";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as Rslice from "../redux/routingSlice";
 function TreeMenu(props) {
-  const menuItems = useRef([]);
-
+  const dispatch = useDispatch();
+  const dispatcher = (func, args) => func && dispatch(Rslice[func](args));
   const opens_in_menu = localStorage.getItem("opens_in_menu");
   const [opens, setOpens] = useState(opens_in_menu?.split(",") ?? []);
-  const dispatch = useDispatch();
-  const dispatcher = (func, id) => func && dispatch(Rslice[func](id));
   const is_open = (id) => opens.includes(id);
+  const is_active = useSelector(Rslice.selectedBrowser);
   const toggling = (id) => {
     if (!is_open(id)) {
       setOpens([...opens, id]);
@@ -22,99 +20,41 @@ function TreeMenu(props) {
       setOpens(editedArray);
     }
   };
+
   useEffect(() => {
     localStorage.setItem("opens_in_menu", opens);
   }, [opens]);
-  function childRender(children, parentMethod, parentIp) {
-    if (children && children.length > 0)
-      return (
-        <ul>
-          {children.map(function (child, j) {
-            if (j > 0)
-              return (
-                <li
-                  onClick={(e) => {
-                    if (e.target === e.currentTarget) {
-                      dispatcher(
-                        children[0].method,
-                        child.ip ? child.ip : child.title
-                      );
 
-                      toggling(child.id);
-                      child.children &&
-                      dispatcher(children[1].children[0].method, null);
-                      if (parentIp) {
-                        dispatcher(parentMethod, parentIp);
-                        dispatch(setInformation([]));
-                        dispatch(setspeedInformation([]));
-                      }
-                    }
-                  }}
-                  className={is_open(child.id) ? "active-li" : ""}
-                  key={j}
-                >
-                  {child.children && (
-                    <FontAwesomeIcon
-                      onClick={(e) => {
-                        if (e.target === e.currentTarget) {
-                          dispatcher(
-                            children[0].method,
-                            child.ip ? child.ip : child.title
-                          );
-                          toggling(child.id);
-                          if (parentIp) {
-                            dispatcher(parentMethod, parentIp);
-                            dispatch(setInformation([]));
-                            dispatch(setspeedInformation([]));
-                          }
-                        }
-                      }}
-                      icon={is_open(child.id) ? faMinus : faPlus}
-                      size="xs"
-                      style={{ marginRight: "5px", padding: "2px" }}
-                    />
-                  )}
-                  {child.title}
-                  {child.ip
-                    ? childRender(child.children, children[0].method, child.ip)
-                    : childRender(child.children, null, null)}
-                </li>
-              );
-            else return null;
-          })}
-        </ul>
-      );
-  }
-
+  const { data, setSelected } = props;
   return (
     <>
-      <ul className="active-ul">
-        {props.data.map(function (el, i) {
-          if (i > 0)
-            return (
-              <li
-                key={i}
+      {data.map((el, i) => {
+        return (
+          <ul key={i} className={el.root ? "active-ul" : null}>
+            <li id={el.id} className={is_open(el.id) ? "active-li" : null}>
+              <span
                 onClick={(e) => {
                   if (e.target === e.currentTarget) {
-                    dispatcher(props.data[0].method, el.id);
+                    el.method && dispatcher(el.method, el.args);
                     toggling(el.id);
+                    setSelected(el);
                   }
                 }}
-                ref={menuItems[el.id]}
-                className={is_open(el.id) ? "active-li" : ""}
+                style={
+                  is_active?.id === el.id
+                    ? { backgroundColor: "#eee" }
+                    : { }
+                }
               >
-                <FontAwesomeIcon
-                  icon={is_open(el.id) ? faMinus : faPlus}
-                  size="xs"
-                  style={{ marginRight: "5px", padding: "2px" }}
-                />
                 {el.title}
-                {childRender(el.children)}
-              </li>
-            );
-          else return null;
-        })}
-      </ul>
+              </span>
+              {el.children && (
+                <TreeMenu data={el.children} setSelected={setSelected} />
+              )}
+            </li>
+          </ul>
+        );
+      })}
     </>
   );
 }
