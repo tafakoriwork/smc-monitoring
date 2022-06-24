@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import "./App.css";
 import Main from "./components/main/main";
-import MainMobile from "./components/main/main_mobile";
+import { setWindowWidth } from "./components/redux/routingSlice";
 function App() {
-  const [width, setwidth] = useState(window.innerWidth);
+  const dispatch = useDispatch();
   function handelWindowSizeChange() {
-    setwidth(window.innerWidth);
+    dispatch(setWindowWidth(window.innerWidth));
   }
   useEffect(() => {
     window.addEventListener("resize", handelWindowSizeChange);
@@ -13,7 +14,7 @@ function App() {
       window.removeEventListener("resize", handelWindowSizeChange);
     };
   }, []);
-  return <div className="App">{width <= 768 ? <MainMobile /> : <Main />}</div>;
+  return <div className="App"><Main /></div>;
 }
 
 export default App;

@@ -1,5 +1,3 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Navbar() {
   return (
@@ -15,10 +13,6 @@ function Navbar() {
       <a className="navbar-brand text-light" href="#">
         <div>SMC-SL</div>
       </a>
-      <div className="position-relative">
-          <textarea className="bg-secondary resize-none srch-box" style={{ color: '#aaa'}} placeholder="search..."></textarea>
-          <FontAwesomeIcon className="srch-icon position-absolute" icon={ faSearch } />
-      </div>
     </nav>
   );
 }

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import {
   ManagementCurrentPanel,
   selectedBrowser,
+  windowWidth,
 } from "../redux/routingSlice";
 import Management from "../management";
 
@@ -16,6 +17,7 @@ function Main() {
   const browserRow = useRef(null);
   const selected_browser = useSelector(selectedBrowser);
   const [isCollapse, setIsCollapse] = useState(true);
+  const window_width = useSelector(windowWidth);
   const [Width, setWidth] = useState(
     parseInt(localStorage.getItem("allhorizontal"), 10)
   );
@@ -42,7 +44,7 @@ function Main() {
       <SplitPane
         ref={firstrow}
         style={{ paddingTop: "60px"}}
-        split="horizontal"
+        split={"horizontal"}
         minSize={"calc(80% - 60px)"}
         defaultSize={
           localStorage.getItem("allhorizontal")
@@ -53,7 +55,7 @@ function Main() {
       >
         <SplitPane
           ref={browserRow}
-          split="vertical"
+          split={window_width >= 980 ? "vertical" : "horizontal"}
           defaultSize={
             localStorage.getItem("verticalsize")
               ? parseInt(localStorage.getItem("verticalsize"), 10)
@@ -70,7 +72,7 @@ function Main() {
             <BrowserMenu width={Width} toggle_browser={toggleBrowser} />
           </Pane>
           <SplitPane
-            split="vertical"
+            split={window_width >= 980 ? "vertical" : "horizontal"}
             className="overflow-hidden"
             defaultSize={
               localStorage.getItem("insideSize")

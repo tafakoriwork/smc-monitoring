@@ -9,6 +9,11 @@ function TreeMenu(props) {
   const opens_in_menu = localStorage.getItem("opens_in_menu");
   const [opens, setOpens] = useState(opens_in_menu?.split(",") ?? []);
   const is_open = (id) => opens.includes(id);
+  function openIt(id) {
+    const el = document.getElementById(id);
+    el.classList.add('active-li');
+    el.parentNode.parentNode.classList.add('active-li');
+  }
   const is_active = useSelector(Rslice.selectedBrowser);
   const toggling = (id) => {
     if (!is_open(id)) {
@@ -46,6 +51,11 @@ function TreeMenu(props) {
                     : { }
                 }
               >
+                {
+                  is_active?.id === el.id
+                    ? openIt(el.id)
+                    : null
+                }
                 {el.title}
               </span>
               {el.children && (

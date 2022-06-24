@@ -6,10 +6,15 @@ import { nodeIp, setSelectedBrowser } from "../redux/routingSlice";
 import CPU from "./CPU";
 import RAM from "./RAM";
 import NIDs from "./NIDs";
+import OS from "../phyisical/OS";
+import Services from "../phyisical/Services";
+import Service from "../phyisical/Service";
+import Hardwares from "../phyisical/Hardwares";
 function Monitoring(props) {
   const dispatch = useDispatch();
-  const isCurrent = (tab) => props.current_tab.title === tab;
-  const nodes =props.current_tab;
+  const isCurrent = (tab) => props.current_tab.type === tab;
+  const isCurrentTitle = (tab) => props.current_tab.title === tab;
+  const nodes = props.current_tab;
   const node_ip = useSelector(nodeIp);
   return (
     <div className="h-100 overflow-hidden">
@@ -48,7 +53,7 @@ function Monitoring(props) {
           { nodes?.children ? nodes.children?.map((el, i) => (
             <div
             key={i}
-            className={isCurrent(el.title) ? "col tab activeTab" : "col tab"}
+            className={isCurrentTitle(el.title) ? "col tab activeTab" : "col tab"}
             onClick={() => dispatch(setSelectedBrowser(el))}
           >
             {el.title}
@@ -59,10 +64,14 @@ function Monitoring(props) {
 
       <div
         className="row px-4 overflow-auto h-100"
-        style={{ paddingBottom: "70px" }}
+        style={{ paddingBottom: "270px" }}
       >
-        {isCurrent("CPUs") && <CPU />}
-        {isCurrent("HDDs") && <RAM />}
+        {isCurrent("CPU") && <CPU />}
+        {isCurrent("HDD") && <RAM />}
+        {isCurrent("OS") && <OS />}
+        {isCurrent("SERVICES") && <Services />}
+        {isCurrent("SERVICE") && <Service />}
+        {isCurrent("HARDWARES") && <Hardwares />}
         {isCurrent("NICs") && <NIDs />}
       </div>
     </div>

@@ -4,7 +4,6 @@ import { currentPanel, setSelectedBrowser } from "../redux/routingSlice";
 import { useState } from "react";
 import Collapser from "./collapser";
 import Toggler from "./toggler";
-import global from "../config/global";
 import data from "../config/data";
 
 function BrowserMenu(props) {

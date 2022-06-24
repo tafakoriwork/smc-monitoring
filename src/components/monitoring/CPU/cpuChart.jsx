@@ -12,6 +12,7 @@ import {
   speedInformation,
 } from "../../redux/cpuStates";
 import {
+  apiUrl,
   currentCluster,
   nodeIp,
 } from "../../redux/routingSlice";
@@ -22,10 +23,10 @@ function VChart() {
   const inf = useSelector(information);
   const speedinf = useSelector(speedInformation);
   const nodeIP = useSelector(nodeIp);
-  const cluster = useSelector(currentCluster);
+  const APIUrl = useSelector(apiUrl);
   const smcRequest = () => {
     axios
-      .get(`${cluster}/smc-sl/api/v1/oshw/cpu/0`, {
+      .get(APIUrl, {
         headers: {
           username: global.username,
           password: global.password,
