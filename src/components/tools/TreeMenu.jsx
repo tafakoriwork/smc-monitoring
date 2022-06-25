@@ -11,8 +11,10 @@ function TreeMenu(props) {
   const is_open = (id) => opens.includes(id);
   function openIt(id) {
     const el = document.getElementById(id);
-    el.classList.add('active-li');
-    el.parentNode.parentNode.classList.add('active-li');
+    if (el) {
+      el.classList.add("active-li");
+      el.parentNode.parentNode.classList.add("active-li");
+    }
   }
   const is_active = useSelector(Rslice.selectedBrowser);
   const toggling = (id) => {
@@ -46,16 +48,10 @@ function TreeMenu(props) {
                   }
                 }}
                 style={
-                  is_active?.id === el.id
-                    ? { backgroundColor: "#eee" }
-                    : { }
+                  is_active?.id === el.id ? { backgroundColor: "#eee" } : {}
                 }
               >
-                {
-                  is_active?.id === el.id
-                    ? openIt(el.id)
-                    : null
-                }
+                {is_active?.id === el.id ? openIt(el.id) : null}
                 {el.title}
               </span>
               {el.children && (

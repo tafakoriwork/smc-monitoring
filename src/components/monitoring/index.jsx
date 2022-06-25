@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { nodeIp, setSelectedBrowser } from "../redux/routingSlice";
 import CPU from "./CPU";
 import RAM from "./RAM";
-import NIDs from "./NIDs";
 import OS from "../phyisical/OS";
 import Services from "../phyisical/Services";
 import Service from "../phyisical/Service";
 import Hardwares from "../phyisical/Hardwares";
 import HDD from "./HDD";
+import HDDs from "../phyisical/HDDs";
+import CPUs from "../phyisical/CPUs";
+import NICs from "../phyisical/NICs";
+import NIC from "./NIC";
 function Monitoring(props) {
   const dispatch = useDispatch();
   const isCurrent = (tab) => props.current_tab.type === tab;
@@ -68,12 +71,15 @@ function Monitoring(props) {
         style={{ paddingBottom: "270px" }}
       >
         {isCurrent("CPU") && <CPU />}
+        {isCurrent("CPUS") && <CPUs />}
         {isCurrent("HDD") && <HDD />}
+        {isCurrent("HDDS") && <HDDs />}
         {isCurrent("OS") && <OS />}
         {isCurrent("SERVICES") && <Services />}
         {isCurrent("SERVICE") && <Service />}
         {isCurrent("HARDWARES") && <Hardwares />}
-        {isCurrent("NICs") && <NIDs />}
+        {isCurrent("NICS") && <NICs />}
+        {isCurrent("NIC") && <NIC />}
       </div>
     </div>
   );

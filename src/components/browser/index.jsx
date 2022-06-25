@@ -23,7 +23,7 @@ function BrowserMenu(props) {
       {selectorType === "Physical" ? (
         <TreeMenu data={data.physicaldata} current={current} setSelected={setSelectedItem} />
       ) : (
-        <TreeMenu data={data.physicaldata} current={current} setSelected={setSelectedItem} />
+        <TreeMenu data={data.logicaldata} current={current} setSelected={setSelectedItem} />
       )}
       <Collapser toggle_browser={toggle_browser} width={width} />
     </div>

@@ -1,10 +1,10 @@
 import Window from "../../tools/window";
-import NDA from "./nda";
+import TotalSize from "./totalSize";
 
 function HDD() {
   return (
     <>
-      <Window body_ui={<NDA />} title={"NDA"} />
+      <Window body_ui={<TotalSize />} title={"total size"} />
     </>
   );
 }
