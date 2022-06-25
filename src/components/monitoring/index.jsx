@@ -10,6 +10,7 @@ import OS from "../phyisical/OS";
 import Services from "../phyisical/Services";
 import Service from "../phyisical/Service";
 import Hardwares from "../phyisical/Hardwares";
+import HDD from "./HDD";
 function Monitoring(props) {
   const dispatch = useDispatch();
   const isCurrent = (tab) => props.current_tab.type === tab;
@@ -67,7 +68,7 @@ function Monitoring(props) {
         style={{ paddingBottom: "270px" }}
       >
         {isCurrent("CPU") && <CPU />}
-        {isCurrent("HDD") && <RAM />}
+        {isCurrent("HDD") && <HDD />}
         {isCurrent("OS") && <OS />}
         {isCurrent("SERVICES") && <Services />}
         {isCurrent("SERVICE") && <Service />}

@@ -15,6 +15,7 @@ import {
   apiUrl,
   currentCluster,
   nodeIp,
+  selectedBrowser,
 } from "../../redux/routingSlice";
 function VChart() {
   const [reload, setReload] = useState(0);
@@ -24,6 +25,8 @@ function VChart() {
   const speedinf = useSelector(speedInformation);
   const nodeIP = useSelector(nodeIp);
   const APIUrl = useSelector(apiUrl);
+  const selected_borwser = useSelector(selectedBrowser);
+
   const smcRequest = () => {
     axios
       .get(APIUrl, {
@@ -31,19 +34,15 @@ function VChart() {
           username: global.username,
           password: global.password,
           address: nodeIP,
-          Authorization:
-            `Bearer ${global.token}`,
+          Authorization: `Bearer ${global.token}`,
         },
       })
       .then((response) => response.data)
       .then((data) => {
         const ndata = data.Result["SMC-SL Result"].result;
         var n = d.toLocaleTimeString();
-        if (ndata["cpu usage"]) {
-          let cpuUsage =
-            Math.ceil(ndata["cpu usage"]) < 0
-              ? 0
-              : Math.ceil(ndata["cpu usage"]);
+        if (ndata["cpu usage"] >= 0) {
+          let cpuUsage = Math.ceil(ndata["cpu usage"]);
           dispatch(setInformation([...inf, { x: n, y: cpuUsage }]));
           dispatch(
             setspeedInformation([
@@ -56,7 +55,12 @@ function VChart() {
             dispatch(shiftspeedInformation());
           }
         }
-            setReload(Math.random());
+        if (localStorage.getItem("cpu_pre") !== selected_borwser.id) {
+          dispatch(setInformation([]));
+          dispatch(setspeedInformation([]));
+        }
+        localStorage.setItem("cpu_pre", selected_borwser.id);
+        setReload(Math.random());
       })
       .catch((error) => {
         const ndata = error;
@@ -64,6 +68,7 @@ function VChart() {
   };
   useEffect(() => {
     smcRequest();
+   
   }, [reload]);
 
   return (

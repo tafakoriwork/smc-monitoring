@@ -1,6 +1,6 @@
 module.exports = {
     nodeIp: "172.30.6",
-    token: "tq3nNIBzPd9ZGDo5FMVO4h6mT8QfcK1JkrCHyaiSYxes2UlERLgwuv7pAWXjb",
+    token: "sVTHR94DfkeZrt5GMUWFld8cxiyIEz7bpPAh1jNgwS3mJXuoYQqanvOK2LCB6",
     username: "morsa",
-    password: "p@ss@ceph"
+    password: "p@ss@ceph",
 }
