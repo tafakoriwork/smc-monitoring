@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { totalSize } from "../../redux/hddstates";
+import { usedSize } from "../../redux/hddstates";
 
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
-function TotalSize() {
-    const totalsize = useSelector(totalSize);
+function UsedSize() {
+    const usedsize = useSelector(usedSize);
     return (
         <>
          <VictoryChart theme={VictoryTheme.material} width={800} >
@@ -15,19 +15,20 @@ function TotalSize() {
           data: {
             stroke: "lightblue",
             strokeWidth: 0.5,
-            fill: "lightblue",
+            fill: "purple",
+            fillOpacity: 0.3,
           },
           parent: { border: "1px solid #ccc" },
           labels: {
             fontSize: 12,
-            fill: "darkblue",
+            fill: "purple",
           },
         }}
-        data={totalsize}
+        data={usedsize}
       />
     </VictoryChart>
         </>
     )
 }
 
-export default TotalSize;
+export default UsedSize;

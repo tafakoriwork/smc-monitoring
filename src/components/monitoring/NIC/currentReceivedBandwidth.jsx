@@ -1,21 +1,20 @@
 import { useSelector } from "react-redux";
 import { totalSize } from "../../redux/hddstates";
-
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
-function TotalSize() {
-    const totalsize = useSelector(totalSize);
-    return (
-        <>
-         <VictoryChart theme={VictoryTheme.material} width={800} >
+import { CurrentReceivedBandwidth } from "../../redux/nicStates";
+function CRBUI() {
+    const crbi = useSelector(CurrentReceivedBandwidth);
+return (<>
+ <VictoryChart theme={VictoryTheme.material} width={800} >
       <VictoryArea
         width={800}
-        labels={({ datum }) => Math.ceil(datum.y) + "GB"}
-        domain={{y: [0, 128]}}
+        labels={({ datum }) => Math.ceil(datum.y)}
+        domain={{y: [0, 1000]}}
         style={{
           data: {
-            stroke: "lightblue",
+            stroke: "pink",
             strokeWidth: 0.5,
-            fill: "lightblue",
+            fill: "pink",
           },
           parent: { border: "1px solid #ccc" },
           labels: {
@@ -23,11 +22,9 @@ function TotalSize() {
             fill: "darkblue",
           },
         }}
-        data={totalsize}
+        data={crbi}
       />
-    </VictoryChart>
-        </>
-    )
+    </VictoryChart></>)
 }
 
-export default TotalSize;
+export default CRBUI;

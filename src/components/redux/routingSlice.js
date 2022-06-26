@@ -15,7 +15,7 @@ export const routingSlice = createSlice({
     panel: null,
     managementPanelTab: null,
     monitoringPanelTab: null,
-    nodeIp: null,
+    nodeIp: "172.30.6.41",
     selectedBrowser: {},
     currentNode: null,
     currentCluster: null,
