@@ -28,6 +28,8 @@ function FreeSize() {
   const usedsize = useSelector(usedSize);
   const nodeIP = useSelector(nodeIp);
   const selected_borwser = useSelector(selectedBrowser);
+  const CancelToken2 = axios.CancelToken;
+  const source2 = CancelToken2.source();
   const smcRequest = () => {
     axios
       .get(APIUrl, {
@@ -37,6 +39,7 @@ function FreeSize() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
+        cancelToken: source2.token
       })
       .then((response) => response.data)
       .then((data) => {
@@ -53,12 +56,6 @@ function FreeSize() {
         if (freesize.length == 4) {
           dispatch(shiftAll());
         }
-        if (localStorage.getItem("hdd_pre") !== selected_borwser.id) {
-          dispatch(setFreeSize([]));
-          dispatch(setUsedSize([]));
-          dispatch(setTotalSize([]));
-        }
-        localStorage.setItem("hdd_pre", selected_borwser.id);
         setReload(Math.random());
       })
       .catch((error) => {
@@ -67,6 +64,17 @@ function FreeSize() {
   };
   useEffect(() => {
     smcRequest();
+
+    if (localStorage.getItem("hdd_pre") !== selected_borwser.id) {
+      source2.cancel('Operation canceled by the user.');
+      dispatch(setFreeSize([]));
+      dispatch(setUsedSize([]));
+      dispatch(setTotalSize([]));
+      setTimeout(() => {
+        setReload(Math.random());
+      }, 2000);
+    }
+    localStorage.setItem("hdd_pre", selected_borwser.id); 
   }, [reload]);
   return (
         <VictoryChart theme={VictoryTheme.material} width={800} >

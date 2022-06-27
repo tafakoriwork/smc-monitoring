@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import global from "../config/global";
+import global, { login_url } from "../config/global";
 function Login() {
     const [User, setUser] = useState({
         username: null,
@@ -21,15 +21,21 @@ function Login() {
       }
 
       const loginRequest = user => {
-       /* axios.post("")
+        const form = new FormData();
+        form.append('user', user.username);
+        form.append('pass', user.password);
+        axios({
+          method: "POST",
+          headers: { "Content-Type": "multipart/form-data" },
+          url: login_url,
+          data: form,
+        })
         .then(result => result.data)
         .then(data => {
-            if(data)
-            setToken("data.tokendata.tokendata.token")
-            
-        })*/
-        setToken("data.tokendata.tokendata.token")
-        setUsername(user.username)
+            if(data.Result['Token'])
+              setToken(data.Result['Token']);
+            else alert('username or password is incorrect!')
+        })
       }
   return (
     <div className="container w-100 loginbody no-max">

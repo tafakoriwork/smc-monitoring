@@ -29,6 +29,8 @@ function __Metric() {
   const _TotalSentBandwidth = useSelector(TotalSentBandwidth);
   const nodeIP = useSelector(nodeIp);
   const selected_borwser = useSelector(selectedBrowser);
+  const CancelToken3 = axios.CancelToken;
+  const source3 = CancelToken3.source();
   const smcRequest = () => {
     axios
       .get(APIUrl, {
@@ -38,6 +40,7 @@ function __Metric() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
+        cancelToken: source3.token
       })
       .then((response) => response.data)
       .then((data) => {
@@ -75,14 +78,6 @@ function __Metric() {
         if (_Metric.length >= 4) {
           dispatch(shiftAll());
         }
-        if (localStorage.getItem("nic_pre") !== selected_borwser.id) {
-          dispatch(setCurrentSentBandwidth([]));
-          dispatch(setCurrentReceivedBandwidth([]));
-          dispatch(setTotalReceivedBandwidth([]));
-          dispatch(setTotalSentBandwidth([]));
-          dispatch(setMetric([]));
-        }
-        localStorage.setItem("nic_pre", selected_borwser.id);
         setReload(Math.random());
       })
       .catch((error) => {
@@ -91,6 +86,17 @@ function __Metric() {
   };
   useEffect(() => {
     smcRequest();
+
+     if (localStorage.getItem("nic_pre") !== selected_borwser.id) {
+      source3.cancel('Operation canceled by the user.');
+      dispatch(setCurrentSentBandwidth([]));
+      dispatch(setCurrentReceivedBandwidth([]));
+      dispatch(setTotalReceivedBandwidth([]));
+      dispatch(setTotalSentBandwidth([]));
+      dispatch(setMetric([]));
+      setReload(Math.random());
+    } 
+    localStorage.setItem("nic_pre", selected_borwser.id);
   }, [reload]);
   return (
     <VictoryChart theme={VictoryTheme.material} width={800}>

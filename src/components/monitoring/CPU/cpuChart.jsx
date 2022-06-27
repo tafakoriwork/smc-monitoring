@@ -26,7 +26,8 @@ function VChart() {
   const nodeIP = useSelector(nodeIp);
   const APIUrl = useSelector(apiUrl);
   const selected_borwser = useSelector(selectedBrowser);
-
+  const CancelToken1 = axios.CancelToken;
+  const source1 = CancelToken1.source();
   const smcRequest = () => {
     axios
       .get(APIUrl, {
@@ -36,11 +37,13 @@ function VChart() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
+        cancelToken: source1.token
       })
       .then((response) => response.data)
       .then((data) => {
         const ndata = data.Result["SMC-SL Result"].result;
         var n = d.toLocaleTimeString();
+        
         if (ndata["cpu usage"] >= 0) {
           let cpuUsage = Math.ceil(ndata["cpu usage"]);
           dispatch(setInformation([...inf, { x: n, y: cpuUsage }]));
@@ -55,11 +58,6 @@ function VChart() {
             dispatch(shiftspeedInformation());
           }
         }
-        if (localStorage.getItem("cpu_pre") !== selected_borwser.id) {
-          dispatch(setInformation([]));
-          dispatch(setspeedInformation([]));
-        }
-        localStorage.setItem("cpu_pre", selected_borwser.id);
         setReload(Math.random());
       })
       .catch((error) => {
@@ -69,6 +67,13 @@ function VChart() {
   useEffect(() => {
     smcRequest();
    
+    if (localStorage.getItem("cpu_pre") !== selected_borwser.id) {
+      source1.cancel('Operation canceled by the user.');
+      dispatch(setInformation([]));
+      dispatch(setspeedInformation([]));
+      setReload(Math.random());
+    }
+    localStorage.setItem("cpu_pre", selected_borwser.id);
   }, [reload]);
 
   return (
