@@ -10,21 +10,44 @@ import FilterModal from "./FilterModal";
 
 function ServicesTable(props) {
   const { services, sortBy } = props;
+  let srvs = services;
   const [is_sub, setIssub] = useState(false);
   const [is_name, setIsname] = useState(false);
   const [is_active, setIsactive] = useState(false);
   const [is_load, setIsload] = useState(false);
   const [is_modal_open, setModalOpen] = useState(false);
-  const [filters, setFilters] = useState([]);
-  const setFilter = async (item) => {
-    if (filters.includes(item)) {
-      let filtersClone = [...filters];
+  const [SubFilters, setSubFilters] = useState([]);
+  const [LoadFilters, setLoadFilters] = useState([]);
+  const [ActiveFilters, setActiveFilters] = useState([]);
+  const setFilterSub = async (item) => {
+    if (SubFilters.includes(item)) {
+      let filtersClone = [...SubFilters];
       const filter = (el) => {
         return el !== item;
       };
       filtersClone = filtersClone.filter(filter);
-      setFilters(filtersClone);
-    } else setFilters([...filters, item]);
+      setSubFilters(filtersClone);
+    } else setSubFilters([...SubFilters, item]);
+  };
+  const setFilterLoad = async (item) => {
+    if (LoadFilters.includes(item)) {
+      let filtersClone = [...LoadFilters];
+      const filter = (el) => {
+        return el !== item;
+      };
+      filtersClone = filtersClone.filter(filter);
+      setLoadFilters(filtersClone);
+    } else setLoadFilters([...LoadFilters, item]);
+  };
+  const setFilterActive = async (item) => {
+    if (ActiveFilters.includes(item)) {
+      let filtersClone = [...ActiveFilters];
+      const filter = (el) => {
+        return el !== item;
+      };
+      filtersClone = filtersClone.filter(filter);
+      setActiveFilters(filtersClone);
+    } else setActiveFilters([...ActiveFilters, item]);
   };
   const toggle = (type) => {
     if (type !== "name") setIsname(false);
@@ -33,12 +56,29 @@ function ServicesTable(props) {
     if (type !== "load") setIsload(false);
   };
 
-  useEffect(() => {
-    console.log(filters);
-  }, [filters]);
+  const checkFilter = el => {
+    let state1 = true, state2 = true, state3 = true;
+
+    switch (true) {
+      case SubFilters.length !== 0:
+        state1 = SubFilters.includes(el.sub);
+        break;
+      case ActiveFilters.length !== 0:
+        state2 =  ActiveFilters.includes(el.active);
+        break;
+      case LoadFilters.length !== 0:
+        state3 = LoadFilters.includes(el.load);
+        break;
+    
+      default:
+        break;
+    }
+    return state1 && state2 && state3
+  }
+
   return (
     <>
-      <table className="table">
+      <table className="table" style={{minHeight: '200px'}}>
         <thead>
           <tr>
             <th className="border">#</th>
@@ -106,17 +146,15 @@ function ServicesTable(props) {
                 color={"#999"}
                 onClick={() => setModalOpen(!is_modal_open)}
               />
-              {is_modal_open && <FilterModal setFilter={setFilter} />}
+              {is_modal_open && <FilterModal filters={{sub: SubFilters, active: ActiveFilters, load: LoadFilters}} setFilterSub={setFilterSub} setFilterLoad={setFilterLoad} setFilterActive={setFilterActive} />}
             </th>
           </tr>
         </thead>
         {services.map((el, i) => {
           return (
             <tbody key={i}>
-              {filters.length > 0 &&
-              (filters.includes(el.sub) ||
-                filters.includes(el.active) ||
-                filters.includes(el.load)) ? (
+              {
+              checkFilter(el) ? (
                 <tr className="border">
                   <td className="border" width={"10%"}>
                     {i + 1}
@@ -134,8 +172,9 @@ function ServicesTable(props) {
                     {el.load}
                   </td>
                 </tr>
-              ) : (
-                <tr className="border">
+              ) :
+              (SubFilters.length === 0 && ActiveFilters.length === 0 && LoadFilters.length === 0 ) && (
+                  <tr className="border">
                   <td className="border" width={"10%"}>
                     {i + 1}
                   </td>
@@ -152,7 +191,8 @@ function ServicesTable(props) {
                     {el.load}
                   </td>
                 </tr>
-              )}
+                )
+              }
             </tbody>
           );
         })}

@@ -1,8 +1,5 @@
 function FilterModal(props) {
-    const {setFilter} = props;
-    function addFilter(type) {
-
-    }
+    const {setFilterActive,setFilterSub,setFilterLoad, filters} = props;
   return (
     <div className="bg-light filter_modal" style={{ width: "250px" }}>
       <div className="row">
@@ -11,13 +8,13 @@ function FilterModal(props) {
             <label htmlFor="active" style={{fontSize: '12px', marginTop: '5px'}}>active</label>
           </div>
           <div className="col-2 text-end">
-            <input type="checkbox" id="active" onChange={() => setFilter('active')}/>
+            <input checked={filters.active.includes('active') && true} type="checkbox" id="active" onChange={() => setFilterActive('active')}/>
           </div>
           <div className="col-4 text-start">
-            <label htmlFor="in-active" style={{fontSize: '12px', marginTop: '5px'}}>in-active</label>
+            <label htmlFor="inactive" style={{fontSize: '12px', marginTop: '5px'}}>inactive</label>
           </div>
           <div className="col-2 text-end">
-            <input type="checkbox" id="in-active" onChange={() => setFilter('in-active')}/>
+            <input checked={filters.active.includes('inactive') && true} type="checkbox" id="inactive" onChange={() => setFilterActive('inactive')}/>
           </div>
         </div>
         <hr />
@@ -26,13 +23,13 @@ function FilterModal(props) {
             <label htmlFor="load" style={{fontSize: '12px', marginTop: '5px'}}>loaded</label>
           </div>
           <div className="col-2 text-end">
-            <input type="checkbox" id="load" onChange={() => setFilter('loaded')}/>
+            <input type="checkbox" checked={filters.load.includes('loaded') && true} id="load" onChange={() => setFilterLoad('loaded')}/>
           </div>
           <div className="col-5 text-start">
             <label htmlFor="not-found" style={{fontSize: '12px', marginTop: '5px'}}>not-found</label>
           </div>
           <div className="col-2 text-end">
-            <input type="checkbox" id="not-found" onChange={() => setFilter('not-found')}/>
+            <input type="checkbox" checked={filters.load.includes('not-found') && true} id="not-found" onChange={() => setFilterLoad('not-found')}/>
           </div>
         </div>
         <hr />
@@ -41,19 +38,19 @@ function FilterModal(props) {
             <label htmlFor="dead" style={{fontSize: '12px', marginTop: '5px'}}>dead</label>
           </div>
           <div className="col-1 text-end px-0">
-            <input type="checkbox" id="dead" onChange={() => setFilter('dead')}/>
+            <input type="checkbox" checked={filters.sub.includes('dead') && true} id="dead" onChange={() => setFilterSub('dead')}/>
           </div>
           <div className="col-3 text-start">
             <label htmlFor="running" style={{fontSize: '12px', marginTop: '5px'}}>running</label>
           </div>
           <div className="col-1 text-end px-0">
-            <input type="checkbox" id="running" onChange={() => setFilter('running')}/>
+            <input type="checkbox" checked={filters.sub.includes('running') && true} id="running" onChange={() => setFilterSub('running')}/>
           </div>
           <div className="col-3 text-start">
             <label htmlFor="exited" style={{fontSize: '12px', marginTop: '5px'}}>exited</label>
           </div>
           <div className="col-1 text-end px-0">
-            <input type="checkbox" id="exited" onChange={() => setFilter('exited')}/>
+            <input type="checkbox" id="exited" checked={filters.sub.includes('exited') && true} onChange={() => setFilterSub('exited')}/>
           </div>
         </div>
       </div>
