@@ -6,8 +6,8 @@ import { nodeIp, setSelectedBrowser } from "../redux/routingSlice";
 import CPU from "./CPU";
 import RAM from "./RAM";
 import OS from "../phyisical/OS";
-import Services from "../phyisical/Services";
-import Service from "../phyisical/Service";
+import Services from "../services/Services";
+import Service from "../services/Service";
 import Hardwares from "../phyisical/Hardwares";
 import HDD from "./HDD";
 import HDDs from "../phyisical/HDDs";
@@ -75,8 +75,7 @@ function Monitoring(props) {
         {isCurrent("HDD") && <HDD />}
         {isCurrent("HDDS") && <HDDs />}
         {isCurrent("OS") && <OS />}
-        {isCurrent("SERVICES") && <Services />}
-        {isCurrent("SERVICE") && <Service />}
+        {isCurrent("SERVICES") && <Service />}
         {isCurrent("HARDWARES") && <Hardwares />}
         {isCurrent("NICS") && <NICs />}
         {isCurrent("NIC") && <NIC />}

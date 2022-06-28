@@ -33,7 +33,10 @@ function Login() {
         .then(result => result.data)
         .then(data => {
             if(data.Result['Token'])
-              setToken(data.Result['Token']);
+              {
+                setToken(data.Result['Token']);
+                setUsername(user.username)
+              }
             else alert('username or password is incorrect!')
         })
       }
