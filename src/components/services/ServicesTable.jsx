@@ -2,11 +2,14 @@ import {
   faChevronDown,
   faChevronUp,
   faFilter,
+  faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import { useState } from "react";
-import FilterModal from "./FilterModal";
+import FilterModalActive from "./FilterModalActive";
+import FilterModalLoad from "./FilterModalLoad";
+import FilterModalSub from "./FilterModalSub";
 
 function ServicesTable(props) {
   const { services, sortBy } = props;
@@ -15,7 +18,9 @@ function ServicesTable(props) {
   const [is_name, setIsname] = useState(false);
   const [is_active, setIsactive] = useState(false);
   const [is_load, setIsload] = useState(false);
-  const [is_modal_open, setModalOpen] = useState(false);
+  const [is_modal_open, setModalOpen] = useState(0);
+  const [filter_on, setFilterOn] = useState(false);
+  const [_services, setServices] = useState(services);
   const [SubFilters, setSubFilters] = useState([]);
   const [LoadFilters, setLoadFilters] = useState([]);
   const [ActiveFilters, setActiveFilters] = useState([]);
@@ -39,6 +44,28 @@ function ServicesTable(props) {
       setLoadFilters(filtersClone);
     } else setLoadFilters([...LoadFilters, item]);
   };
+  /* select all filters Active*/
+  const selectAllActive = async(state) => {
+    if(state)
+    setActiveFilters(['active', 'inactive']);
+    else 
+    setActiveFilters([]);
+  }
+  /* select all filters Sub*/
+  const selectAllSub = async(state) => {
+    if(state)
+    setSubFilters(['dead', 'exited', 'running']);
+    else 
+    setSubFilters([]);
+  }
+  /* select all filters Load*/
+  const selectAllLoad = async(state) => {
+    console.log(state);
+    if(state)
+    setLoadFilters(['not-found', 'loaded']);
+    else 
+    setLoadFilters([]);
+  }
   const setFilterActive = async (item) => {
     if (ActiveFilters.includes(item)) {
       let filtersClone = [...ActiveFilters];
@@ -56,33 +83,37 @@ function ServicesTable(props) {
     if (type !== "load") setIsload(false);
   };
 
-  const checkFilter = el => {
-    let state1 = true, state2 = true, state3 = true;
+  const closeModal = async () => {
+    setModalOpen(0);
+  };
 
-    switch (true) {
-      case SubFilters.length !== 0:
-        state1 = SubFilters.includes(el.sub);
-        break;
-      case ActiveFilters.length !== 0:
-        state2 =  ActiveFilters.includes(el.active);
-        break;
-      case LoadFilters.length !== 0:
-        state3 = LoadFilters.includes(el.load);
-        break;
-    
-      default:
-        break;
-    }
-    return state1 && state2 && state3
-  }
+  const checkFilter = () => {
+    let keepServices = services;
+    ActiveFilters.length &&
+      (keepServices = keepServices.filter((el) =>
+        ActiveFilters.includes(el.active)
+      ));
+    SubFilters.length &&
+      (keepServices = keepServices.filter((el) => SubFilters.includes(el.sub)));
+    LoadFilters.length &&
+      (keepServices = keepServices.filter((el) =>
+        LoadFilters.includes(el.load)
+      ));
+
+    setServices(keepServices);
+  };
+
+  useEffect(() => {
+    checkFilter();
+  }, [ActiveFilters, SubFilters, LoadFilters]);
 
   return (
     <>
-      <table className="table" style={{minHeight: '200px'}}>
+      <table className="table" style={{ minHeight: "200px" }}>
         <thead>
           <tr>
             <th className="border">#</th>
-            <th className="border">
+            <th className="border position-relative">
               name
               <span className="px-2 c-pointer">
                 <FontAwesomeIcon
@@ -96,7 +127,17 @@ function ServicesTable(props) {
                 />
               </span>
             </th>
-            <th className="border">
+            <th className="border position-relative">
+              {filter_on && (
+                <div
+                  className="position-absolute"
+                  onClick={() =>
+                    is_modal_open === 2 ? setModalOpen(0) : setModalOpen(2)
+                  }
+                >
+                  <FontAwesomeIcon icon={faList} size="xs" color="#aaa" />
+                </div>
+              )}
               sub
               <span className="px-2 c-pointer">
                 <FontAwesomeIcon
@@ -109,8 +150,28 @@ function ServicesTable(props) {
                   }}
                 />
               </span>
+              {is_modal_open === 2 && (
+                <FilterModalSub
+                  filters={{
+                    sub: SubFilters,
+                  }}
+                  setFilterSub={setFilterSub}
+                  close={closeModal}
+                  setSelectAll={selectAllSub}
+                />
+              )}
             </th>
-            <th className="border">
+            <th className="border position-relative">
+              {filter_on && (
+                <div
+                  className="position-absolute"
+                  onClick={() =>
+                    is_modal_open === 3 ? setModalOpen(0) : setModalOpen(3)
+                  }
+                >
+                  <FontAwesomeIcon icon={faList} size="xs" color="#aaa" />
+                </div>
+              )}
               active
               <span className="px-2 c-pointer">
                 <FontAwesomeIcon
@@ -123,8 +184,28 @@ function ServicesTable(props) {
                   }}
                 />
               </span>
+              {is_modal_open === 3 && (
+                <FilterModalActive
+                  filters={{
+                    active: ActiveFilters,
+                  }}
+                  setFilterActive={setFilterActive}
+                  setSelectAll={selectAllActive}
+                  close={closeModal}
+                />
+              )}
             </th>
             <th className="border position-relative">
+              {filter_on && (
+                <div
+                  className="position-absolute"
+                  onClick={() =>
+                    is_modal_open === 4 ? setModalOpen(0) : setModalOpen(4)
+                  }
+                >
+                  <FontAwesomeIcon icon={faList} size="xs" color="#aaa" />
+                </div>
+              )}
               <div>
                 load
                 <span className="px-2 c-pointer">
@@ -144,55 +225,41 @@ function ServicesTable(props) {
                 className="position-absolute c-pointer"
                 style={{ top: "5px", right: "10px" }}
                 color={"#999"}
-                onClick={() => setModalOpen(!is_modal_open)}
+                onClick={() => setFilterOn(!filter_on)}
               />
-              {is_modal_open && <FilterModal filters={{sub: SubFilters, active: ActiveFilters, load: LoadFilters}} setFilterSub={setFilterSub} setFilterLoad={setFilterLoad} setFilterActive={setFilterActive} />}
+              {is_modal_open === 4 && (
+                <FilterModalLoad
+                  filters={{
+                    load: LoadFilters,
+                  }}
+                  setFilterLoad={setFilterLoad}
+                  close={closeModal}
+                  setSelectAll={selectAllLoad}
+                />
+              )}
             </th>
           </tr>
         </thead>
-        {services.map((el, i) => {
+        {_services.map((el, i) => {
           return (
             <tbody key={i}>
-              {
-              checkFilter(el) ? (
-                <tr className="border">
-                  <td className="border" width={"10%"}>
-                    {i + 1}
-                  </td>
-                  <td className="border" width={"30%"}>
-                    {el.name}
-                  </td>
-                  <td className="border" width={"20%"}>
-                    {el.sub}
-                  </td>
-                  <td className="border" width={"20%"}>
-                    {el.active}
-                  </td>
-                  <td className="border" width={"20%"}>
-                    {el.load}
-                  </td>
-                </tr>
-              ) :
-              (SubFilters.length === 0 && ActiveFilters.length === 0 && LoadFilters.length === 0 ) && (
-                  <tr className="border">
-                  <td className="border" width={"10%"}>
-                    {i + 1}
-                  </td>
-                  <td className="border" width={"30%"}>
-                    {el.name}
-                  </td>
-                  <td className="border" width={"20%"}>
-                    {el.sub}
-                  </td>
-                  <td className="border" width={"20%"}>
-                    {el.active}
-                  </td>
-                  <td className="border" width={"20%"}>
-                    {el.load}
-                  </td>
-                </tr>
-                )
-              }
+              <tr className="border">
+                <td className="border" width={"10%"}>
+                  {i + 1}
+                </td>
+                <td className="border" width={"30%"}>
+                  {el.name}
+                </td>
+                <td className="border" width={"20%"}>
+                  {el.sub}
+                </td>
+                <td className="border" width={"20%"}>
+                  {el.active}
+                </td>
+                <td className="border" width={"20%"}>
+                  {el.load}
+                </td>
+              </tr>
             </tbody>
           );
         })}

@@ -21,8 +21,12 @@ export const routingSlice = createSlice({
     currentCluster: null,
     apiUrl: null,
     windowWidth: 1366,
+    opens: [],
   },
   reducers: {
+    setOpens:  (state, action) => {
+      state.opens = action.payload;
+    },
     setPanel: (state, action) => {
       state.panel = action.payload;
     },
@@ -63,6 +67,7 @@ export const {
   setCluster,
   setAPIUrl,
   setWindowWidth,
+  setOpens,
 } = routingSlice.actions;
 export const currentPanel = (state) => state.routing.panel;
 export const MonitoringCurrentPanel = (state) =>
@@ -75,5 +80,6 @@ export const currentNode = (state) => state.routing.currentNode;
 export const currentCluster = (state) => state.routing.currentCluster;
 export const apiUrl = (state) => state.routing.apiUrl;
 export const windowWidth = (state) => state.routing.windowWidth;
+export const opensInMenu = (state) => state.routing.opens;
 
 export default routingSlice.reducer;

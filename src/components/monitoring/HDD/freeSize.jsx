@@ -39,7 +39,7 @@ function FreeSize() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
-        cancelToken: source2.token
+        cancelToken: source2.token,
       })
       .then((response) => response.data)
       .then((data) => {
@@ -48,11 +48,26 @@ function FreeSize() {
         let free_size = ndata["free size"];
         let used_size = ndata["used size"];
         let total_size = ndata["total size"];
-        if(free_size){
-      dispatch(setFreeSize([...freesize, { x: n, y: global.byteToGigaByte(free_size)}]));
-       dispatch(setUsedSize([...usedsize, { x: n, y: global.byteToGigaByte(used_size) }]));
-       dispatch(setTotalSize([...totalsize, { x: n, y: global.byteToGigaByte(total_size) }]));
-    }
+        if (free_size) {
+          dispatch(
+            setFreeSize([
+              ...freesize,
+              { x: n, y: global.byteToGigaByte(free_size) },
+            ])
+          );
+          dispatch(
+            setUsedSize([
+              ...usedsize,
+              { x: n, y: global.byteToGigaByte(used_size) },
+            ])
+          );
+          dispatch(
+            setTotalSize([
+              ...totalsize,
+              { x: n, y: global.byteToGigaByte(total_size) },
+            ])
+          );
+        }
         if (freesize.length == 4) {
           dispatch(shiftAll());
         }
@@ -66,7 +81,7 @@ function FreeSize() {
     smcRequest();
 
     if (localStorage.getItem("hdd_pre") !== selected_borwser.id) {
-      source2.cancel('Operation canceled by the user.');
+      source2.cancel("Operation canceled by the user.");
       dispatch(setFreeSize([]));
       dispatch(setUsedSize([]));
       dispatch(setTotalSize([]));
@@ -74,30 +89,51 @@ function FreeSize() {
         setReload(Math.random());
       }, 2000);
     }
-    localStorage.setItem("hdd_pre", selected_borwser.id); 
+    localStorage.setItem("hdd_pre", selected_borwser.id);
   }, [reload]);
+
+  const getMin = () => {
+    return Math.min(...freesize.map((item) => item.y));
+  };
+  const getMax = () => {
+    return Math.max(...freesize.map((item) => item.y));
+  };
+  const getAvg = () => {
+    var total = 0;
+    for (var i = 0; i < freesize.length; i++) {
+      total += freesize[i].y;
+    }
+    return Math.floor(total / freesize.length);
+  };
   return (
-        <VictoryChart theme={VictoryTheme.material} width={800} >
-      <VictoryArea
-        width={800}
-        labels={({ datum }) => Math.ceil(datum.y) + "GB"}
-        domain={{y: [0, 128]}}
-        style={{
-          data: {
-            stroke: "darkblue",
-            strokeWidth: 0.5,
-            fill: "darkblue",
-            fillOpacity: "0.1",
-          },
-          parent: { border: "1px solid #ccc" },
-          labels: {
-            fontSize: 12,
-            fill: "darkblue",
-          },
-        }}
-        data={freesize}
-      />
-    </VictoryChart>
+    <>
+      <div className="row justify-content-between">
+        <div className="col">Min: {getMin()}</div>
+        <div className="col">Max: {getMax()}</div>
+        <div className="col">Avg: {getAvg()}</div>
+      </div>
+      <VictoryChart theme={VictoryTheme.material} width={800}>
+        <VictoryArea
+          width={800}
+          labels={({ datum }) => Math.ceil(datum.y) + "GB"}
+          domain={{ y: [0, getMax()] }}
+          style={{
+            data: {
+              stroke: "darkblue",
+              strokeWidth: 0.5,
+              fill: "darkblue",
+              fillOpacity: "0.1",
+            },
+            parent: { border: "1px solid #ccc" },
+            labels: {
+              fontSize: 12,
+              fill: "darkblue",
+            },
+          }}
+          data={freesize}
+        />
+      </VictoryChart>
+    </>
   );
 }
 

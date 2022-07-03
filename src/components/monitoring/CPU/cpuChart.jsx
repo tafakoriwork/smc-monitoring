@@ -28,6 +28,20 @@ function VChart() {
   const selected_borwser = useSelector(selectedBrowser);
   const CancelToken1 = axios.CancelToken;
   const source1 = CancelToken1.source();
+
+  const getMin = () => {
+    return Math.min(...inf.map((item) => item.y));
+  };
+  const getMax = () => {
+    return Math.max(...inf.map((item) => item.y));
+  };
+  const getAvg = () => {
+    var total = 0;
+    for(var i = 0; i < inf.length; i++) {
+        total += inf[i].y;
+    }
+    return Math.floor(total / inf.length);
+  };
   const smcRequest = () => {
     axios
       .get(APIUrl, {
@@ -37,13 +51,13 @@ function VChart() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
-        cancelToken: source1.token
+        cancelToken: source1.token,
       })
       .then((response) => response.data)
       .then((data) => {
         const ndata = data.Result["SMC-SL Result"].result;
         var n = d.toLocaleTimeString();
-        
+
         if (ndata["cpu usage"] >= 0) {
           let cpuUsage = Math.ceil(ndata["cpu usage"]);
           dispatch(setInformation([...inf, { x: n, y: cpuUsage }]));
@@ -66,9 +80,9 @@ function VChart() {
   };
   useEffect(() => {
     smcRequest();
-   
+
     if (localStorage.getItem("cpu_pre") !== selected_borwser.id) {
-      source1.cancel('Operation canceled by the user.');
+      source1.cancel("Operation canceled by the user.");
       dispatch(setInformation([]));
       dispatch(setspeedInformation([]));
       setReload(Math.random());
@@ -77,27 +91,34 @@ function VChart() {
   }, [reload]);
 
   return (
-    <VictoryChart theme={VictoryTheme.material} width={800}>
-      <VictoryArea
-        width={800}
-        labels={({ datum }) => Math.ceil(datum.y) + "%"}
-        domain={{ y: [0, 100] }}
-        style={{
-          data: {
-            stroke: "darkblue",
-            strokeWidth: 0.5,
-            fill: "darkblue",
-            fillOpacity: "0.1",
-          },
-          parent: { border: "1px solid #ccc" },
-          labels: {
-            fontSize: 12,
-            fill: "darkblue",
-          },
-        }}
-        data={inf}
-      />
-    </VictoryChart>
+    <>
+      <div className="row justify-content-between">
+        <div className="col">Min: {getMin()}</div>
+        <div className="col">Max: {getMax()}</div>
+        <div className="col">Avg: {getAvg()}</div>
+      </div>
+      <VictoryChart theme={VictoryTheme.material} width={800}>
+        <VictoryArea
+          width={800}
+          labels={({ datum }) => Math.ceil(datum.y) + "%"}
+          domain={{ y: [getMin(), getMax()] }}
+          style={{
+            data: {
+              stroke: "darkblue",
+              strokeWidth: 0.5,
+              fill: "darkblue",
+              fillOpacity: "0.1",
+            },
+            parent: { border: "1px solid #ccc" },
+            labels: {
+              fontSize: 12,
+              fill: "darkblue",
+            },
+          }}
+          data={inf}
+        />
+      </VictoryChart>
+    </>
   );
 }
 

@@ -11,6 +11,7 @@ function App() {
     dispatch(setWindowWidth(window.innerWidth));
   }
   useEffect(() => {
+    handelWindowSizeChange();
     window.addEventListener("resize", handelWindowSizeChange);
     return () => {
       window.removeEventListener("resize", handelWindowSizeChange);

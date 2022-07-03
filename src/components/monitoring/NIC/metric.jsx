@@ -98,12 +98,34 @@ function __Metric() {
     } 
     localStorage.setItem("nic_pre", selected_borwser.id);
   }, [reload]);
+  
+  const getMin = () => {
+    return Math.ceil(Math.min(..._Metric.map((item) => item.y)));
+  };
+  const getMax = () => {
+    return  Math.ceil(Math.max(..._Metric.map((item) => item.y)));
+  };
+  const getAvg = () => {
+    var total = 0;
+    for (var i = 0; i < _Metric.length; i++) {
+      total += _Metric[i].y;
+    }
+    return Math.ceil(total / _Metric.length);
+  };
+
+
   return (
+    <>
+      <div className="row justify-content-between">
+        <div className="col">Min: {getMin()}</div>
+        <div className="col">Max: {getMax()}</div>
+        <div className="col">Avg: {getAvg()}</div>
+      </div>
     <VictoryChart theme={VictoryTheme.material} width={800}>
       <VictoryArea
         width={800}
         labels={({ datum }) => Math.ceil(datum.y)}
-        domain={{ y: [0, 100000] }}
+        domain={{ y: [getMin(), getMax()] }}
         style={{
           data: {
             stroke: "darkblue",
@@ -120,6 +142,7 @@ function __Metric() {
         data={_Metric}
       />
     </VictoryChart>
+    </>
   );
 }
 

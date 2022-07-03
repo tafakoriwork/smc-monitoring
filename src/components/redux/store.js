@@ -3,6 +3,7 @@ import cpuReducer from './cpuStates';
 import hddReducer from './hddstates';
 import nicReducer from './nicStates';
 import routingReducer from './routingSlice';
+import serviceReducer from './serviceSlice';
 import userReducer from './usersSlice';
 export default configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export default configureStore({
     user: userReducer,
     hdd: hddReducer,
     nic: nicReducer,
+    service: serviceReducer,
   },
 });
