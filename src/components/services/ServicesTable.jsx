@@ -2,7 +2,7 @@ import {
   faChevronDown,
   faChevronUp,
   faFilter,
-  faList,
+  faFilterCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
@@ -12,8 +12,7 @@ import FilterModalLoad from "./FilterModalLoad";
 import FilterModalSub from "./FilterModalSub";
 
 function ServicesTable(props) {
-  const { services, sortBy } = props;
-  let srvs = services;
+  const { services } = props;
   const [is_sub, setIssub] = useState(false);
   const [is_name, setIsname] = useState(false);
   const [is_active, setIsactive] = useState(false);
@@ -24,6 +23,62 @@ function ServicesTable(props) {
   const [SubFilters, setSubFilters] = useState([]);
   const [LoadFilters, setLoadFilters] = useState([]);
   const [ActiveFilters, setActiveFilters] = useState([]);
+
+  async function sortBy(type, state) {
+    switch (true) {
+      case type === "name":
+        _services.sort((a, b) => {
+          if (!state) {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+          } else {
+            if (a.name > b.name) return -1;
+            if (a.name < b.name) return 1;
+          }
+          return 0;
+        });
+        break;
+      case type === "sub":
+        _services.sort((a, b) => {
+          if (!state) {
+            if (a.sub < b.sub) return -1;
+            if (a.sub > b.sub) return 1;
+          } else {
+            if (a.sub > b.sub) return -1;
+            if (a.sub < b.sub) return 1;
+          }
+          return 0;
+        });
+        break;
+      case type === "active":
+        _services.sort((a, b) => {
+          if (!state) {
+            if (a.active < b.active) return -1;
+            if (a.active > b.active) return 1;
+          } else {
+            if (a.active > b.active) return -1;
+            if (a.active < b.active) return 1;
+          }
+          return 0;
+        });
+        break;
+      case type === "load":
+        _services.sort((a, b) => {
+          if (!state) {
+            if (a.load < b.load) return -1;
+            if (a.load > b.load) return 1;
+          } else {
+            if (a.load > b.load) return -1;
+            if (a.load < b.load) return 1;
+          }
+          return 0;
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   const setFilterSub = async (item) => {
     if (SubFilters.includes(item)) {
       let filtersClone = [...SubFilters];
@@ -45,27 +100,20 @@ function ServicesTable(props) {
     } else setLoadFilters([...LoadFilters, item]);
   };
   /* select all filters Active*/
-  const selectAllActive = async(state) => {
-    if(state)
-    setActiveFilters(['active', 'inactive']);
-    else 
-    setActiveFilters([]);
-  }
+  const selectAllActive = async (state) => {
+    if (state) setActiveFilters(["active", "inactive"]);
+    else setActiveFilters([]);
+  };
   /* select all filters Sub*/
-  const selectAllSub = async(state) => {
-    if(state)
-    setSubFilters(['dead', 'exited', 'running']);
-    else 
-    setSubFilters([]);
-  }
+  const selectAllSub = async (state) => {
+    if (state) setSubFilters(["dead", "exited", "running"]);
+    else setSubFilters([]);
+  };
   /* select all filters Load*/
-  const selectAllLoad = async(state) => {
-    console.log(state);
-    if(state)
-    setLoadFilters(['not-found', 'loaded']);
-    else 
-    setLoadFilters([]);
-  }
+  const selectAllLoad = async (state) => {
+    if (state) setLoadFilters(["not-found", "loaded"]);
+    else setLoadFilters([]);
+  };
   const setFilterActive = async (item) => {
     if (ActiveFilters.includes(item)) {
       let filtersClone = [...ActiveFilters];
@@ -84,6 +132,13 @@ function ServicesTable(props) {
   };
 
   const closeModal = async () => {
+    setModalOpen(0);
+  };
+
+  const resetFilter = () => {
+    setActiveFilters([]);
+    setSubFilters([]);
+    setLoadFilters([]);
     setModalOpen(0);
   };
 
@@ -135,7 +190,7 @@ function ServicesTable(props) {
                     is_modal_open === 2 ? setModalOpen(0) : setModalOpen(2)
                   }
                 >
-                  <FontAwesomeIcon icon={faList} size="xs" color="#aaa" />
+                  <FontAwesomeIcon icon={faFilter} size="xs" color="#aaa" />
                 </div>
               )}
               sub
@@ -169,7 +224,7 @@ function ServicesTable(props) {
                     is_modal_open === 3 ? setModalOpen(0) : setModalOpen(3)
                   }
                 >
-                  <FontAwesomeIcon icon={faList} size="xs" color="#aaa" />
+                  <FontAwesomeIcon icon={faFilter} size="xs" color="#aaa" />
                 </div>
               )}
               active
@@ -203,7 +258,7 @@ function ServicesTable(props) {
                     is_modal_open === 4 ? setModalOpen(0) : setModalOpen(4)
                   }
                 >
-                  <FontAwesomeIcon icon={faList} size="xs" color="#aaa" />
+                  <FontAwesomeIcon icon={faFilter} size="xs" color="#aaa" />
                 </div>
               )}
               <div>
@@ -221,11 +276,17 @@ function ServicesTable(props) {
                 </span>
               </div>
               <FontAwesomeIcon
-                icon={faFilter}
+                icon={filter_on ? faFilterCircleXmark : faFilter}
                 className="position-absolute c-pointer"
                 style={{ top: "5px", right: "10px" }}
-                color={"#999"}
-                onClick={() => setFilterOn(!filter_on)}
+                color={"#a96"}
+                onClick={() => {
+                  if (filter_on) {
+                    setFilterOn(false);
+                    resetFilter();
+                  } else 
+                    setFilterOn(1);
+                }}
               />
               {is_modal_open === 4 && (
                 <FilterModalLoad
@@ -244,21 +305,11 @@ function ServicesTable(props) {
           return (
             <tbody key={i}>
               <tr className="border">
-                <td className="border" width={"10%"}>
-                  {i + 1}
-                </td>
-                <td className="border" width={"30%"}>
-                  {el.name}
-                </td>
-                <td className="border" width={"20%"}>
-                  {el.sub}
-                </td>
-                <td className="border" width={"20%"}>
-                  {el.active}
-                </td>
-                <td className="border" width={"20%"}>
-                  {el.load}
-                </td>
+                <td className="border">{i + 1}</td>
+                <td className="border">{el.name}</td>
+                <td className="border">{el.sub}</td>
+                <td className="border">{el.active}</td>
+                <td className="border">{el.load}</td>
               </tr>
             </tbody>
           );

@@ -1,13 +1,13 @@
-import { useSelector } from "react-redux";
-import { totalSize } from "../../redux/hddstates";
 
+import { useSelector } from "react-redux";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
+import { speedInformation } from "../../redux/coreStates";
 import { selectedBrowser } from "../../redux/routingSlice";
-function TotalSize() {
-  const totalsize = useSelector(totalSize);
+
+function CPUSpeed() {
+  var inf = useSelector(speedInformation);
   const selected_borwser = useSelector(selectedBrowser);
-  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_totalsize`);
- 
+  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_speed`);
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
@@ -36,32 +36,33 @@ function TotalSize() {
   return (
     <>
       <div className="row justify-content-between">
-        <div className="col">Min: {getMin()} GB</div>
-        <div className="col">Max: {getMax()} GB</div>
-        <div className="col">Avg: {getAvg()} GB</div>
+        <div className="col">Min: {getMin()}</div>
+        <div className="col">Max: {getMax()}</div>
+        <div className="col">Avg: {getAvg()}</div>
       </div>
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
-          labels={({ datum }) => Math.ceil(datum.y) + "GB"}
+          labels={({ datum }) => Math.ceil(datum.y)}
           domain={{ y: [getMin(), getMax()] }}
           style={{
             data: {
-              stroke: "lightblue",
+              stroke: "teal",
               strokeWidth: 0.5,
-              fill: "lightblue",
+              fill: "green",
+              fillOpacity: "0.1",
             },
             parent: { border: "1px solid #ccc" },
             labels: {
               fontSize: 12,
-              fill: "darkblue",
+              fill: "teal",
             },
           }}
-          data={totalsize}
+          data={inf}
         />
       </VictoryChart>
     </>
   );
 }
 
-export default TotalSize;
+export default CPUSpeed;

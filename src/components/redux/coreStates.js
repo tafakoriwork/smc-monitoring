@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const cpuStates = createSlice({
-  name: 'cpu',
+export const coreStates = createSlice({
+  name: 'core',
   initialState: {
     information: [],
     speedInformation: [],
@@ -26,8 +26,8 @@ export const cpuStates = createSlice({
   },
 })
 
-export const { setInformation, shiftInformation, shiftspeedInformation, setspeedInformation } = cpuStates.actions
+export const { setInformation, shiftInformation, shiftspeedInformation, setspeedInformation } = coreStates.actions
 
-export const information = (state) => state.cpu.information;
-export const speedInformation = (state) => state.cpu.speedInformation;
-export default cpuStates.reducer;
+export const information = (state) => state.core.information;
+export const speedInformation = (state) => state.core.speedInformation;
+export default coreStates.reducer;

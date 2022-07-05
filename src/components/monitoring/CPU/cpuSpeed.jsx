@@ -2,22 +2,37 @@
 import { useSelector } from "react-redux";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import { speedInformation } from "../../redux/cpuStates";
+import { selectedBrowser } from "../../redux/routingSlice";
 
 function CPUSpeed() {
   var inf = useSelector(speedInformation);
-
+  const selected_borwser = useSelector(selectedBrowser);
+  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_speed`);
+ 
   const getMin = () => {
-    return Math.min(...inf.map((item) => item.y));
+    if (sessionDatas) {
+      const sesstionData = sessionDatas.split(",");
+      return Number(Math.min(...sesstionData.map((item) => item)));
+    }return 0;
   };
+
   const getMax = () => {
-    return Math.max(...inf.map((item) => item.y));
-  };
-  const getAvg = () => {
-    var total = 0;
-    for (var i = 0; i < inf.length; i++) {
-      total += inf[i].y;
+    if (sessionDatas) {
+      const sesstionData = sessionDatas.split(",");
+      return Number(Math.max(...sesstionData.map((item) => item)));
     }
-    return Math.floor(total / inf.length);
+    return 0;
+  };
+
+  const getAvg = () => {
+    if (sessionDatas) {
+      const sesstionData = sessionDatas.split(",");
+      var total = 0;
+      for (var i = 0; i < sesstionData.length; i++) {
+        total = Number(sesstionData[i]) + total;
+      }
+      return parseFloat(total / ( sesstionData.length)).toFixed(2);
+    } return 0;
   };
   return (
     <>
@@ -31,6 +46,7 @@ function CPUSpeed() {
           width={800}
           labels={({ datum }) => Math.ceil(datum.y)}
           domain={{ y: [getMin(), getMax()] }}
+          domainPadding={20}
           style={{
             data: {
               stroke: "teal",

@@ -472,3 +472,7 @@ hr {
 .text-444 {
   color: #444;
 }
+
+th {
+  overflow: visible;
+}

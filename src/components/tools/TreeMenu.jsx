@@ -51,7 +51,7 @@ function TreeMenu(props) {
                   is_active?.id === el.id ? { backgroundColor: "#eee" } : {}
                 }
               >
-              {el.children && <FontAwesomeIcon icon={is_open(el.id) ? faMinus : faPlus} size={'xs'} className="px-1"/>}
+              {el.children ? <FontAwesomeIcon icon={is_open(el.id) ? faMinus : faPlus} size={'xs'} className="px-1"/> : <span class='ms-3'>&nbsp;</span>}
                 {is_active?.id === el.id ? openIt(el.id) : null}
                 {el.title}
               </span>

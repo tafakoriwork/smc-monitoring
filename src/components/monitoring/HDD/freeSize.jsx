@@ -30,6 +30,36 @@ function FreeSize() {
   const selected_borwser = useSelector(selectedBrowser);
   const CancelToken2 = axios.CancelToken;
   const source2 = CancelToken2.source();
+
+  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_freesize`);
+ 
+  const getMin = () => {
+    if (sessionDatas) {
+      const sesstionData = sessionDatas.split(",");
+      return Math.min(...sesstionData.map((item) => item));
+    }return 0;
+  };
+
+  const getMax = () => {
+    if (sessionDatas) {
+      const sesstionData = sessionDatas.split(",");
+      return Math.max(...sesstionData.map((item) => item));
+    }
+    return 0;
+  };
+
+  const getAvg = () => {
+    if (sessionDatas) {
+      const sesstionData = sessionDatas.split(",");
+      var total = 0;
+      for (var i = 0; i < sesstionData.length; i++) {
+        total = Number(sesstionData[i]) + total;
+      }
+      return parseFloat(total / ( sesstionData.length)).toFixed(2);
+    }return 0;
+  };
+
+
   const smcRequest = () => {
     axios
       .get(APIUrl, {
@@ -48,6 +78,42 @@ function FreeSize() {
         let free_size = ndata["free size"];
         let used_size = ndata["used size"];
         let total_size = ndata["total size"];
+
+
+        const getFromStorage = sessionStorage.getItem(
+          `${selected_borwser.id}_speed`
+        );
+        let freesizeFromStorage;
+        if (getFromStorage) freesizeFromStorage = getFromStorage.split(",");
+        else freesizeFromStorage = [];
+        sessionStorage.setItem(`${selected_borwser.id}_freesize`, [
+          ...freesizeFromStorage,
+          global.byteToGigaByte(free_size)
+        ]);
+
+        let usedsizeFromStorage;
+        const getFromStorage2 = sessionStorage.getItem(
+          `${selected_borwser.id}_usedsize`
+        );
+        if (getFromStorage2) usedsizeFromStorage = getFromStorage2.split(",");
+        else usedsizeFromStorage = [];
+        sessionStorage.setItem(`${selected_borwser.id}_usedsize`, [
+          ...usedsizeFromStorage,
+          global.byteToGigaByte(used_size)
+        ]);
+
+        let totalsizeFromStorage;
+        const getFromStorage3 = sessionStorage.getItem(
+          `${selected_borwser.id}_totalsize`
+        );
+        if (getFromStorage3) totalsizeFromStorage = getFromStorage3.split(",");
+        else totalsizeFromStorage = [];
+        sessionStorage.setItem(`${selected_borwser.id}_totalsize`, [
+          ...totalsizeFromStorage,
+          global.byteToGigaByte(total_size),
+        ]);
+
+
         if (free_size) {
           dispatch(
             setFreeSize([
@@ -92,31 +158,24 @@ function FreeSize() {
     localStorage.setItem("hdd_pre", selected_borwser.id);
   }, [reload]);
 
-  const getMin = () => {
-    return Math.min(...freesize.map((item) => item.y));
-  };
-  const getMax = () => {
-    return Math.max(...freesize.map((item) => item.y));
-  };
-  const getAvg = () => {
-    var total = 0;
-    for (var i = 0; i < freesize.length; i++) {
-      total += freesize[i].y;
-    }
-    return Math.floor(total / freesize.length);
-  };
+
+
+
+
+  
+
   return (
     <>
       <div className="row justify-content-between">
-        <div className="col">Min: {getMin()}</div>
-        <div className="col">Max: {getMax()}</div>
-        <div className="col">Avg: {getAvg()}</div>
+        <div className="col">Min: {getMin()} GB</div>
+        <div className="col">Max: {getMax()} GB</div>
+        <div className="col">Avg: {getAvg()} GB</div>
       </div>
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
           labels={({ datum }) => Math.ceil(datum.y) + "GB"}
-          domain={{ y: [0, getMax()] }}
+          domain={{ y: [getMin(), getMax()] }}
           style={{
             data: {
               stroke: "darkblue",

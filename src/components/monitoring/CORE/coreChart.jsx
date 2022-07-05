@@ -10,9 +10,13 @@ import {
   shiftInformation,
   shiftspeedInformation,
   speedInformation,
-} from "../../redux/cpuStates";
-import { apiUrl, nodeIp, selectedBrowser } from "../../redux/routingSlice";
-function VChart() {
+} from "../../redux/coreStates";
+import {
+  apiUrl,
+  nodeIp,
+  selectedBrowser,
+} from "../../redux/routingSlice";
+function COREChart() {
   const [reload, setReload] = useState(0);
   var d = new Date();
   const dispatch = useDispatch();
@@ -23,21 +27,20 @@ function VChart() {
   const selected_borwser = useSelector(selectedBrowser);
   const CancelToken1 = axios.CancelToken;
   const source1 = CancelToken1.source();
-  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_usage`);
-  const sesstionData = sessionDatas?.split(",");
 
+  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_usage`);
+ 
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Number(Math.min(...sesstionData.map((item) => item)));
-    }
-    return 0;
+      return Math.min(...sesstionData.map((item) => item));
+    }return 0;
   };
 
   const getMax = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Number(Math.max(...sesstionData.map((item) => item)));
+      return Math.max(...sesstionData.map((item) => item));
     }
     return 0;
   };
@@ -49,9 +52,8 @@ function VChart() {
       for (var i = 0; i < sesstionData.length; i++) {
         total = Number(sesstionData[i]) + total;
       }
-      return parseFloat(total / (sesstionData.length)).toFixed(2);
-    }
-    return 0;
+      return parseFloat(total / ( sesstionData.length)).toFixed(2);
+    }return 0;
   };
   const smcRequest = () => {
     axios
@@ -66,11 +68,11 @@ function VChart() {
       })
       .then((response) => response.data)
       .then((data) => {
-        const ndata = data.Result["SMC-SL Result"].result;
+        const ndata = data.Result["SMC-SL Result"].result[0];
         var n = d.toLocaleTimeString();
 
-        if (ndata["cpu usage"] >= 0) {
-          let cpuUsage = Math.ceil(ndata["cpu usage"]);
+        if (ndata["core usage"] >= 0) {
+          let coreUsage = Math.ceil(ndata["core usage"]);
 
           const getFromStorage = sessionStorage.getItem(
             `${selected_borwser.id}_speed`
@@ -80,7 +82,7 @@ function VChart() {
           else speedFromStorage = [];
           sessionStorage.setItem(`${selected_borwser.id}_speed`, [
             ...speedFromStorage,
-            Math.ceil(ndata["cpu current speed"]),
+            Math.ceil(ndata["core current speed"]),
           ]);
           let usageFromStorage;
           const getFromStorage2 = sessionStorage.getItem(
@@ -90,14 +92,14 @@ function VChart() {
           else usageFromStorage = [];
           sessionStorage.setItem(`${selected_borwser.id}_usage`, [
             ...usageFromStorage,
-            cpuUsage,
+            coreUsage,
           ]);
 
-          dispatch(setInformation([...inf, { x: n, y: cpuUsage }]));
+          dispatch(setInformation([...inf, { x: n, y: coreUsage }]));
           dispatch(
             setspeedInformation([
               ...speedinf,
-              { x: n, y: Math.ceil(ndata["cpu current speed"]) },
+              { x: n, y: Math.ceil(ndata["core current speed"]) },
             ])
           );
           if (inf.length == 6) {
@@ -114,14 +116,13 @@ function VChart() {
   useEffect(() => {
     smcRequest();
 
-    if (localStorage.getItem("cpu_pre") !== selected_borwser.id) {
+    if (localStorage.getItem("core_pre") !== selected_borwser.id) {
       source1.cancel("Operation canceled by the user.");
       dispatch(setInformation([]));
       dispatch(setspeedInformation([]));
       setReload(Math.random());
     }
-    localStorage.setItem("cpu_pre", selected_borwser.id);
-   
+    localStorage.setItem("core_pre", selected_borwser.id);
   }, [reload]);
 
   return (
@@ -156,4 +157,4 @@ function VChart() {
   );
 }
 
-export default VChart;
+export default COREChart;

@@ -48,6 +48,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                          children: [
+                            {
+                              id: "_node_1_cpu0_core0",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/0",
+                            },
+                          ],
                         },
                         {
                           id: "_node_1_cpu2",
@@ -55,6 +64,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
+                          children: [
+                            {
+                              id: "_node_1_cpu2_core2",
+                              title: "CORE2",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
+                            },
+                          ]
                         },
                       ],
                     },
@@ -182,6 +200,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                          children: [
+                            {
+                              id: "_node_2_cpu0_core0",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/0",
+                            },
+                          ],
                         },
                         {
                           id: "_node_2_cpu2",
@@ -189,6 +216,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
+                          children: [
+                            {
+                              id: "_node_2_cpu0_core1",
+                              title: "CORE1",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
+                            },
+                          ],
                         },
                       ],
                     },
@@ -315,6 +351,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                          children: [
+                            {
+                              id: "_node_3_cpu0_core0",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/0",
+                            },
+                          ],
                         },
                         {
                           id: "_node_3_cpu2",
@@ -322,6 +367,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
+                          children: [
+                            {
+                              id: "_node_3_cpu0_core1",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
+                            },
+                          ],
                         },
                       ],
                     },
@@ -448,6 +502,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                          children: [
+                            {
+                              id: "_node_4_cpu0_core0",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/0",
+                            },
+                          ],
                         },
                         {
                           id: "_node_4_cpu2",
@@ -455,6 +518,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
+                          children: [
+                            {
+                              id: "_node_4_cpu0_core1",
+                              title: "CORE1",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
+                            },
+                          ],
                         },
                       ],
                     },
@@ -581,6 +653,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                          children: [
+                            {
+                              id: "_node_5_cpu0_core0",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/0",
+                            },
+                          ],
                         },
                         {
                           id: "_node_5_cpu2",
@@ -588,6 +669,15 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
+                          children: [
+                            {
+                              id: "_node_5_cpu0_core1",
+                              title: "CORE1",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
+                            },
+                          ],
                         },
                       ],
                     },
@@ -714,6 +804,22 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                          children: [
+                            {
+                              id: "_node_6_cpu0_core0",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/0",
+                            },
+                             {
+                              id: "_node_6_cpu0_core1",
+                              title: "CORE1",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
+                            },
+                          ],
                         },
                         {
                           id: "_node_6_cpu1",
@@ -721,6 +827,22 @@ module.exports = {
                           type: "CPU",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/1",
+                          children: [
+                            {
+                              id: "_node_6_cpu1_core1",
+                              title: "CORE0",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/2",
+                            },
+                            {
+                              id: "_node_6_cpu1_core2",
+                              title: "CORE1",
+                              type: "CORE",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/3",
+                            },
+                          ],
                         },
                       ],
                     },

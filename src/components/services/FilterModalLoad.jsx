@@ -7,7 +7,7 @@ function FilterModalLoad(props) {
     setSelectAll(e.target.checked);
   };
   return (
-    <div className="bg-light filter_modal py-4 " style={{ width: "200px" }}>
+    <div className="bg-light filter_modal py-4 position-absolute" style={{ width: "200px" }}>
       <span
         className="text-secondary me-auto position-absolute"
         style={{ fontSize: "13px", top: "5px", left: "5px" }}

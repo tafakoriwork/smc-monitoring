@@ -36,60 +36,6 @@ function Services() {
     },
   ]);
 
-  async function sortBy(type, state) {
-    switch (true) {
-      case type === "name":
-        services.sort((a, b) => {
-          if (!state) {
-            if (a.name < b.name) return -1;
-            if (a.name > b.name) return 1;
-          } else {
-            if (a.name > b.name) return -1;
-            if (a.name < b.name) return 1;
-          }
-          return 0;
-        });
-        break;
-      case type === "sub":
-        services.sort((a, b) => {
-          if (!state) {
-            if (a.sub < b.sub) return -1;
-            if (a.sub > b.sub) return 1;
-          } else {
-            if (a.sub > b.sub) return -1;
-            if (a.sub < b.sub) return 1;
-          }
-          return 0;
-        });
-        break;
-      case type === "active":
-        services.sort((a, b) => {
-          if (!state) {
-            if (a.active < b.active) return -1;
-            if (a.active > b.active) return 1;
-          } else {
-            if (a.active > b.active) return -1;
-            if (a.active < b.active) return 1;
-          }
-          return 0;
-        });
-        break;
-      case type === "load":
-        services.sort((a, b) => {
-          if (!state) {
-            if (a.load < b.load) return -1;
-            if (a.load > b.load) return 1;
-          } else {
-            if (a.load > b.load) return -1;
-            if (a.load < b.load) return 1;
-          }
-          return 0;
-        });
-        break;
-      default:
-        break;
-    }
-  }
 
   function servicesRequest() {
     services.length === 0 &&
@@ -181,7 +127,7 @@ function Services() {
       className="w-100 h-100"
       style={{ display: "grid", placeItems: "center" }}
     >
-      <ServicesTable services={services} sortBy={sortBy} />
+      <ServicesTable services={services} />
     </div>
   );
 }

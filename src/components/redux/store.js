@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import coreReducer from './coreStates';
 import cpuReducer from './cpuStates';
 import hddReducer from './hddstates';
 import nicReducer from './nicStates';
@@ -9,6 +10,7 @@ export default configureStore({
   reducer: {
     routing: routingReducer,
     cpu: cpuReducer,
+    core: coreReducer,
     user: userReducer,
     hdd: hddReducer,
     nic: nicReducer,

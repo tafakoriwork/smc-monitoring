@@ -1,12 +1,9 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { nodeIp, setSelectedBrowser } from "../redux/routingSlice";
 import CPU from "./CPU";
-import RAM from "./RAM";
 import OS from "../phyisical/OS";
-import Services from "../services/Services";
 import Service from "../services/Service";
 import Hardwares from "../phyisical/Hardwares";
 import HDD from "./HDD";
@@ -14,6 +11,7 @@ import HDDs from "../phyisical/HDDs";
 import CPUs from "../phyisical/CPUs";
 import NICs from "../phyisical/NICs";
 import NIC from "./NIC";
+import CORE from "./CORE";
 function Monitoring(props) {
   const dispatch = useDispatch();
   const isCurrent = (tab) => props.current_tab.type === tab;
@@ -53,7 +51,7 @@ function Monitoring(props) {
             {props.current_tab.title}
           </h5>
         </div>
-        <div className="row tabbar" style={{ height: "36px" }}>
+      {/* <div className="row tabbar" style={{ height: "36px" }}>
           { nodes?.children ? nodes.children?.map((el, i) => (
             <div
             key={i}
@@ -64,12 +62,13 @@ function Monitoring(props) {
           </div>
           )) : (<center>{props.current_tab.title}</center>)}
         </div>
+      */} 
       </div>
-
       <div
         className="row px-4 overflow-auto h-100"
         style={{ paddingBottom: "270px" }}
       >
+        {isCurrent("CORE") && <CORE />}
         {isCurrent("CPU") && <CPU />}
         {isCurrent("CPUS") && <CPUs />}
         {isCurrent("HDD") && <HDD />}
