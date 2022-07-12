@@ -87,7 +87,7 @@ function __Metric() {
   useEffect(() => {
     smcRequest();
 
-     if (localStorage.getItem("nic_pre") !== selected_borwser.id) {
+     if (localStorage.getItem("_pre") !== selected_borwser.id) {
       source3.cancel('Operation canceled by the user.');
       dispatch(setCurrentSentBandwidth([]));
       dispatch(setCurrentReceivedBandwidth([]));
@@ -96,7 +96,7 @@ function __Metric() {
       dispatch(setMetric([]));
       setReload(Math.random());
     } 
-    localStorage.setItem("nic_pre", selected_borwser.id);
+    localStorage.setItem("_pre", selected_borwser.id);
   }, [reload]);
   
   const getMin = () => {

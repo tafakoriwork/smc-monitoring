@@ -11,8 +11,10 @@ module.exports = {
       children: [
         {
           id: "node_1",
-          title: "Node1",
+          title: "Node1 (172.30.6.41)",
           method: "setNodeIP",
+          "address-IP4": "172.30.6.41",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           args: { ip: "172.30.6.41", id: "node_1" },
           address: "172.30.6.41",
           type: "NODE",
@@ -66,8 +68,8 @@ module.exports = {
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
                           children: [
                             {
-                              id: "_node_1_cpu2_core2",
-                              title: "CORE2",
+                              id: "_node_1_cpu2_core1",
+                              title: "CORE1",
                               type: "CORE",
                               method: "setAPIUrl",
                               args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/1",
@@ -87,6 +89,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_1_hdd_sdb",
@@ -155,6 +173,43 @@ module.exports = {
                         },
                       ],
                     },
+                    {
+                      id: "_node_1_ceph",
+                      title: "CEPH",
+                      type: "CEPH",
+                      //method: "setAPIUrl",
+                      //args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic",
+                      children: [
+                        {
+                          id: "_node_1_nic_osds",
+                          title: "OSDs",
+                          type: "OSDs",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/ceph/osd",
+                        },
+                        {
+                          id: "_node_1_nic_pool",
+                          title: "POOL",
+                          type: "POOL",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/ens224",
+                        },
+                        {
+                          id: "_node_1_nic_lun",
+                          title: "LUN",
+                          type: "LUN",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/lo",
+                        },
+                        {
+                          id: "_node_1_nic_cephservices",
+                          title: "CEPH SERVICES",
+                          type: "CEPHSERVICES",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/ceph/ceph",
+                        },
+                      ],
+                    },
                   ],
                 },
               ],
@@ -163,10 +218,12 @@ module.exports = {
         },
         {
           id: "node_2",
-          title: "Node2",
+          title: "Node2 (172.30.6.42)",
           method: "setNodeIP",
           args: { ip: "172.30.6.42", id: "node_2" },
           address: "172.30.6.42",
+            "address-IP4": "172.30.6.42",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           type: "NODE",
           children: [
             {
@@ -239,6 +296,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_2_hdd_sdb",
@@ -314,10 +387,12 @@ module.exports = {
           ],
         }, {
           id: "node_3",
-          title: "Node3",
+          title: "Node3 (172.30.6.43)",
           method: "setNodeIP",
           args: { ip: "172.30.6.43", id: "node_3" },
           address: "172.30.6.43",
+          "address-IP4": "172.30.6.43",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           type: "NODE",
           children: [
             {
@@ -390,6 +465,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_3_hdd_sdb",
@@ -465,11 +556,13 @@ module.exports = {
           ],
         },{
           id: "node_4",
-          title: "Node4",
+          title: "Node4 (172.30.6.44)",
           method: "setNodeIP",
           args: { ip: "172.30.6.44", id: "node_4" },
           address: "172.30.6.44",
           type: "NODE",
+          "address-IP4": "172.30.6.44",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           children: [
             {
               id: "_node_4_os",
@@ -541,6 +634,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_4_hdd_sdb",
@@ -616,11 +725,13 @@ module.exports = {
           ],
         },{
           id: "node_5",
-          title: "Node5",
+          title: "Node5 (172.30.6.45)",
           method: "setNodeIP",
           args: { ip: "172.30.6.45", id: "node_5" },
           address: "172.30.6.45",
           type: "NODE",
+          "address-IP4": "172.30.6.45",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           children: [
             {
               id: "_node_5_os",
@@ -692,6 +803,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_5_hdd_sdb",
@@ -767,10 +894,12 @@ module.exports = {
           ],
         },{
           id: "node_6",
-          title: "Node6",
+          title: "Node6 (172.30.6.46)",
           method: "setNodeIP",
           args: { ip: "172.30.6.46", id: "node_6" },
           address: "172.30.6.46",
+          "address-IP4": "172.30.6.41",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           type: "NODE",
           children: [
             {
@@ -830,14 +959,14 @@ module.exports = {
                           children: [
                             {
                               id: "_node_6_cpu1_core1",
-                              title: "CORE0",
+                              title: "CORE2",
                               type: "CORE",
                               method: "setAPIUrl",
                               args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/2",
                             },
                             {
                               id: "_node_6_cpu1_core2",
-                              title: "CORE1",
+                              title: "CORE3",
                               type: "CORE",
                               method: "setAPIUrl",
                               args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/core/3",
@@ -857,6 +986,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_6_hdd_sdb",
@@ -931,144 +1076,13 @@ module.exports = {
             },
           ],
         },{
-          id: "node_7",
-          title: "Node7",
-          method: "setNodeIP",
-          args: { ip: "172.30.6.48", id: "node_7" },
-          address: "172.30.6.48",
-          type: "NODE",
-          children: [
-            {
-              id: "_node_7_os",
-              title: "OS",
-              type: "OS",
-              children: [
-                {
-                  id: "_node_7_services",
-                  title: "Services",
-                  method: "setAPIUrl",
-                  type: "SERVICES",
-                  args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/services",
-             
-                },
-                {
-                  id: "_node_7_hardwares",
-                  title: "Hardwares",
-                  type: "HARDWARES",
-                  children: [
-                    {
-                      id: "_node_7_cpus",
-                      title: "CPUs",
-                      type: "CPUS",
-                      method: "setAPIUrl",
-                      args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu",
-                      children: [
-                        {
-                          id: "_node_7_cpu0",
-                          title: "CPU0",
-                          type: "CPU",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
-                        },
-                        {
-                          id: "_node_7_cpu2",
-                          title: "CPU2",
-                          type: "CPU",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
-                        },
-                      ],
-                    },
-                    {
-                      id: "_node_7_hdds",
-                      title: "HDDs",
-                      type: "HDDS",
-                      children: [
-                        {
-                          id: "_node_7_hdd_sda",
-                          title: "sda",
-                          type: "HDD",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
-                        },
-                        {
-                          id: "_node_7_hdd_sdb",
-                          title: "sdb",
-                          type: "HDD",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdb",
-                        },
-                        {
-                          id: "_node_7_hdd_sdc",
-                          title: "sdc",
-                          type: "HDD",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdc",
-                        },
-                        {
-                          id: "_node_7_hdd_sdd",
-                          title: "sdd",
-                          type: "HDD",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdd",
-                        },
-                        {
-                          id: "_node_7_hdd_sde",
-                          title: "sde",
-                          type: "HDD",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sde",
-                        },
-                        {
-                          id: "_node_7_hdd_sdf",
-                          title: "sdf",
-                          type: "HDD",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdf",
-                        },
-                      ],
-                    },
-                    {
-                      id: "_node_7_nics",
-                      title: "NICs",
-                      type: "NICS",
-                      method: "setAPIUrl",
-                      args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic",
-                      children: [
-                        {
-                          id: "_node_7_nic_ens192",
-                          title: "ens192",
-                          type: "NIC",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/ens192",
-                        },
-                        {
-                          id: "_node_7_nic_ens224",
-                          title: "ens224",
-                          type: "NIC",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/ens224",
-                        },
-                        {
-                          id: "_node_7_nic_lo",
-                          title: "lo",
-                          type: "NIC",
-                          method: "setAPIUrl",
-                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/lo",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },{
           id: "node_8",
-          title: "Node8",
+          title: "Node7 (172.30.6.48)",
           method: "setNodeIP",
-          args: { ip: "172.30.6.49", id: "node_8" },
-          address: "172.30.6.49",
+          args: { ip: "172.30.6.48", id: "node_8" },
+          address: "172.30.6.48",
+          "address-IP4": "172.30.6.41",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
           type: "NODE",
           children: [
             {
@@ -1082,7 +1096,7 @@ module.exports = {
                   method: "setAPIUrl",
                   type: "SERVICES",
                   args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/services",
-               
+             
                 },
                 {
                   id: "_node_8_hardwares",
@@ -1123,6 +1137,22 @@ module.exports = {
                           type: "HDD",
                           method: "setAPIUrl",
                           args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
                         },
                         {
                           id: "_node_8_hdd_sdb",
@@ -1196,6 +1226,157 @@ module.exports = {
               ],
             },
           ],
+        },{
+          id: "node_9",
+          title: "Node8 (172.30.6.49)",
+          method: "setNodeIP",
+          args: { ip: "172.30.6.49", id: "node_9" },
+          address: "172.30.6.49",
+          type: "NODE",
+          "address-IP4": "172.30.6.41",
+          "address-IP6": "fe80::9c9d:1e6b:92aa:2251%19",
+          children: [
+            {
+              id: "_node_9_os",
+              title: "OS",
+              type: "OS",
+              children: [
+                {
+                  id: "_node_9_services",
+                  title: "Services",
+                  method: "setAPIUrl",
+                  type: "SERVICES",
+                  args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/services",
+               
+                },
+                {
+                  id: "_node_9_hardwares",
+                  title: "Hardwares",
+                  type: "HARDWARES",
+                  children: [
+                    {
+                      id: "_node_9_cpus",
+                      title: "CPUs",
+                      type: "CPUS",
+                      method: "setAPIUrl",
+                      args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu",
+                      children: [
+                        {
+                          id: "_node_9_cpu0",
+                          title: "CPU0",
+                          type: "CPU",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/0",
+                        },
+                        {
+                          id: "_node_9_cpu2",
+                          title: "CPU2",
+                          type: "CPU",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/cpu/2",
+                        },
+                      ],
+                    },
+                    {
+                      id: "_node_9_hdds",
+                      title: "HDDs",
+                      type: "HDDS",
+                      children: [
+                        {
+                          id: "_node_9_hdd_sda",
+                          title: "sda",
+                          type: "HDD",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sda",
+                          children: [
+                            {
+                              id: "_node_6_hdd_sda1",
+                              title: "sda1",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda1",
+                            },
+                            {
+                              id: "_node_6_hdd_sda2",
+                              title: "sda2",
+                              type: "HDD",
+                              method: "setAPIUrl",
+                              args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/partition/sda2",
+                            },
+                          ]
+                        },
+                        {
+                          id: "_node_9_hdd_sdb",
+                          title: "sdb",
+                          type: "HDD",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdb",
+                        },
+                        {
+                          id: "_node_9_hdd_sdc",
+                          title: "sdc",
+                          type: "HDD",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdc",
+                        },
+                        {
+                          id: "_node_9_hdd_sdd",
+                          title: "sdd",
+                          type: "HDD",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdd",
+                        },
+                        {
+                          id: "_node_9_hdd_sde",
+                          title: "sde",
+                          type: "HDD",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sde",
+                        },
+                        {
+                          id: "_node_9_hdd_sdf",
+                          title: "sdf",
+                          type: "HDD",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/hdd/sdf",
+                        },
+                      ],
+                    },
+                    {
+                      id: "_node_9_nics",
+                      title: "NICs",
+                      type: "NICS",
+                      method: "setAPIUrl",
+                      args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic",
+                      children: [
+                        {
+                          id: "_node_9_nic_ens192",
+                          title: "ens192",
+                          type: "NIC",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/ens192",
+                        },
+                        {
+                          id: "_node_9_nic_ens224",
+                          title: "ens224",
+                          type: "NIC",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/ens224",
+                        },
+                        {
+                          id: "_node_9_nic_lo",
+                          title: "lo",
+                          type: "NIC",
+                          method: "setAPIUrl",
+                          args: "http://smc-sl-api.local/smc-sl/api/v1/oshw/nic/lo",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -1204,11 +1385,19 @@ module.exports = {
   logicaldata: [
     {
       root: true,
-      id: "cluster_1",
-      title: "LOGICAL",
+      id: "ceph_1",
+      title: "CEPH",
       method: null,
       type: "CLUSTER",
       args: null,
+      children: [
+        {
+          id: "osds",
+          title: "OSDs",
+          address: "172.30.6.41",
+          type: "NODE",
+        }
+      ]
     }
   ],
 };

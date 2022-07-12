@@ -6,6 +6,7 @@ export const hddStates = createSlice({
     totalSize: [],
     freeSize: [],
     usedSize: [],
+    mounted: null,
   },
   reducers: {
     setTotalSize: (state, action) => {
@@ -28,12 +29,16 @@ export const hddStates = createSlice({
         state.freeSize = freeTemp;
         state.usedSize = usedTemp;
     },
+    setMounted: (state, action) => {
+      state.mounted = action.payload;
+  },
   },
 })
 
-export const { setTotalSize, setFreeSize, setUsedSize, shiftAll } = hddStates.actions
+export const { setTotalSize, setFreeSize, setUsedSize, shiftAll, setMounted } = hddStates.actions
 
 export const totalSize = (state) => state.hdd.totalSize;
 export const freeSize = (state) => state.hdd.freeSize;
 export const usedSize = (state) => state.hdd.usedSize;
+export const Mounted = (state) => state.hdd.mounted;
 export default hddStates.reducer;

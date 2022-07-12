@@ -4,12 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiUrl, nodeIp } from "../redux/routingSlice";
 import global from "../config/global";
 import ServicesTable from "./ServicesTable";
-import { setActives, setDead, setExited, setInactives, setLoaded, setNotFound, setRunning } from "../redux/serviceSlice";
-function Services() {
+import {
+  setActives,
+  setDead,
+  setExited,
+  setInactives,
+  setLoaded,
+  setNotFound,
+  setRunning,
+} from "../redux/serviceSlice";
+function Services(props) {
+  const { url } = props; 
   const APIUrl = useSelector(apiUrl);
   const nodeIP = useSelector(nodeIp);
   const dispatch = useDispatch();
-  const [services, setServices] = useState([
+  const [services, setServices] = useState([]);
+  if(url == "http://smc-sl-api.local/smc-sl/api/v1/oshw/services/" && !services.length)
+  setServices([
     {
       name: "auditd.service",
       sub: "running",
@@ -35,8 +46,39 @@ function Services() {
       load: "not-found",
     },
   ]);
-
-
+  else if(!services.length)
+  setServices([
+    {
+      name: "ceph-crash.service",
+      sub: "running",
+      active: "active",
+      load: "loaded",
+    },
+    {
+      name: "ceph-osd@0.service",
+      sub: "exited",
+      active: "active",
+      load: "loaded",
+    },
+    {
+      name: "ceph-osd@1.service",
+      sub: "dead",
+      active: "inactive",
+      load: "loaded",
+    },
+    {
+      name: "ceph-volume@lvm-0-915bfc5a-127a-4f2b-a49d-525661424633.service",
+      sub: "dead",
+      active: "inactive",
+      load: "not-found",
+    },
+    {
+      name: "ceph-volume@lvm-1-5a8ce508-dbd4-40ab-a45d-916540108260.service",
+      sub: "dead",
+      active: "active",
+      load: "not-found",
+    },
+  ]);
   function servicesRequest() {
     services.length === 0 &&
       axios
@@ -51,7 +93,9 @@ function Services() {
         .then((result) => result.data)
         .then((response) => {
           if (response.Status.RetVal) {
-            setServices(response.Result["SMC-SL Result"].result);
+            response.Result["SMC-SL Result"].result.map((el) => {
+              console.log(el, url);
+            });
           } else servicesRequest();
         });
   }

@@ -12,6 +12,8 @@ import CPUs from "../phyisical/CPUs";
 import NICs from "../phyisical/NICs";
 import NIC from "./NIC";
 import CORE from "./CORE";
+import OSDs from "./OSD/OSDs";
+import OSD from "./OSD";
 function Monitoring(props) {
   const dispatch = useDispatch();
   const isCurrent = (tab) => props.current_tab.type === tab;
@@ -74,10 +76,13 @@ function Monitoring(props) {
         {isCurrent("HDD") && <HDD />}
         {isCurrent("HDDS") && <HDDs />}
         {isCurrent("OS") && <OS />}
-        {isCurrent("SERVICES") && <Service />}
+        {isCurrent("SERVICES") && <Service url={"http://smc-sl-api.local/smc-sl/api/v1/oshw/services/"}/>}
+        {isCurrent("CEPHSERVICES") && <Service url={"http://smc-sl-api.local/smc-sl/api/v1/ceph/ceph/"}/>}
         {isCurrent("HARDWARES") && <Hardwares />}
         {isCurrent("NICS") && <NICs />}
         {isCurrent("NIC") && <NIC />}
+        {isCurrent("OSDs") && <OSDs />}
+        {isCurrent("OSD") && <OSD />}
       </div>
     </div>
   );

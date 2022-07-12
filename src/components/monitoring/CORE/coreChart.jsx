@@ -116,13 +116,13 @@ function COREChart() {
   useEffect(() => {
     smcRequest();
 
-    if (localStorage.getItem("core_pre") !== selected_borwser.id) {
+    if (localStorage.getItem("_pre") !== selected_borwser.id) {
       source1.cancel("Operation canceled by the user.");
       dispatch(setInformation([]));
       dispatch(setspeedInformation([]));
       setReload(Math.random());
     }
-    localStorage.setItem("core_pre", selected_borwser.id);
+    localStorage.setItem("_pre", selected_borwser.id);
   }, [reload]);
 
   return (

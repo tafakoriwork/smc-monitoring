@@ -12,6 +12,7 @@ import global from "../../config/global";
 import {
   freeSize,
   setFreeSize,
+  setMounted,
   setTotalSize,
   setUsedSize,
   shiftAll,
@@ -78,6 +79,7 @@ function FreeSize() {
         let free_size = ndata["free size"];
         let used_size = ndata["used size"];
         let total_size = ndata["total size"];
+        let mounted = ndata["mounted"];
 
 
         const getFromStorage = sessionStorage.getItem(
@@ -133,6 +135,9 @@ function FreeSize() {
               { x: n, y: global.byteToGigaByte(total_size) },
             ])
           );
+          dispatch(
+            setMounted(mounted)
+          );
         }
         if (freesize.length == 4) {
           dispatch(shiftAll());
@@ -146,7 +151,7 @@ function FreeSize() {
   useEffect(() => {
     smcRequest();
 
-    if (localStorage.getItem("hdd_pre") !== selected_borwser.id) {
+    if (localStorage.getItem("_pre") !== selected_borwser.id) {
       source2.cancel("Operation canceled by the user.");
       dispatch(setFreeSize([]));
       dispatch(setUsedSize([]));
@@ -155,7 +160,7 @@ function FreeSize() {
         setReload(Math.random());
       }, 2000);
     }
-    localStorage.setItem("hdd_pre", selected_borwser.id);
+    localStorage.setItem("_pre", selected_borwser.id);
   }, [reload]);
 
 

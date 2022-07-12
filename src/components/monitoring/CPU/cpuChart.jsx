@@ -24,7 +24,6 @@ function VChart() {
   const CancelToken1 = axios.CancelToken;
   const source1 = CancelToken1.source();
   const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_usage`);
-  const sesstionData = sessionDatas?.split(",");
 
   const getMin = () => {
     if (sessionDatas) {
@@ -114,13 +113,13 @@ function VChart() {
   useEffect(() => {
     smcRequest();
 
-    if (localStorage.getItem("cpu_pre") !== selected_borwser.id) {
+    if (localStorage.getItem("_pre") !== selected_borwser.id) {
       source1.cancel("Operation canceled by the user.");
       dispatch(setInformation([]));
       dispatch(setspeedInformation([]));
       setReload(Math.random());
     }
-    localStorage.setItem("cpu_pre", selected_borwser.id);
+    localStorage.setItem("_pre", selected_borwser.id);
    
   }, [reload]);
 
