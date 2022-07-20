@@ -1,25 +1,30 @@
-
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
-import { speedInformation } from "../../redux/coreStates";
 import { selectedBrowser } from "../../redux/routingSlice";
+import {
+  _Used,
+} from "../../redux/poolStates";
+import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import Loading from "../../tools/Loading";
-
-function CPUSpeed() {
-  var inf = useSelector(speedInformation);
+function Used() {
   const selected_borwser = useSelector(selectedBrowser);
-  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_speed`);
+  const used = useSelector(_Used);
+  const [diagram_obj, setDiagramObj] = useState([]);
+  const sessionDatas = sessionStorage.getItem(
+    `${selected_borwser.id}_used`
+  );
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Math.min(...sesstionData.map((item) => item));
-    }return 0;
+      return Math.min(...sesstionData.map((item) => item)).toFixed(2);
+    }
+    return 0;
   };
 
   const getMax = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Math.max(...sesstionData.map((item) => item));
+      return Math.max(...sesstionData.map((item) => item)).toFixed(2);
     }
     return 0;
   };
@@ -31,12 +36,31 @@ function CPUSpeed() {
       for (var i = 0; i < sesstionData.length; i++) {
         total = Number(sesstionData[i]) + total;
       }
-      return parseFloat(total / ( sesstionData.length)).toFixed(2);
-    }return 0;
+      return parseFloat(total / sesstionData.length).toFixed(2);
+    }
+    return 0;
   };
+
+  function diagramMaker() {
+    const d = new Date();
+    const n = d.toLocaleTimeString();
+    if(used.size !== null)
+      setDiagramObj([...diagram_obj, { x: n, y: used.size }]);
+    if(diagram_obj.length >= 6)
+    {
+      const temp = diagram_obj;
+      temp.splice(0, 1);
+      setDiagramObj(temp);
+    }
+  }
+
+  useEffect(() => {
+    diagramMaker();
+  }, [used]);
+
   return (
     <>
-     {inf.length ? 
+      {diagram_obj.length ? 
       <div>
       <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
@@ -46,22 +70,22 @@ function CPUSpeed() {
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
-          labels={({ datum }) => Math.ceil(datum.y)}
+          labels={({ datum }) => datum.y + used.type}
           domain={{ y: [0, getMax() * 2] }}
           style={{
             data: {
-              stroke: "teal",
+              stroke: "darkblue",
               strokeWidth: 0.5,
-              fill: "green",
+              fill: "darkblue",
               fillOpacity: "0.1",
             },
             parent: { border: "1px solid #ccc" },
             labels: {
               fontSize: 12,
-              fill: "teal",
+              fill: "darkblue",
             },
           }}
-          data={inf}
+          data={diagram_obj}
         />
       </VictoryChart>
       </div> : <Loading />}
@@ -69,4 +93,4 @@ function CPUSpeed() {
   );
 }
 
-export default CPUSpeed;
+export default Used;

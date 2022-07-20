@@ -5,6 +5,7 @@ import {
   _loadeds,
   _notfounds,
 } from "../redux/serviceSlice";
+import Loading from "../tools/Loading";
 
 function Load() {
   const notfound = useSelector(_notfounds);
@@ -15,7 +16,10 @@ function Load() {
     { x: "loaded", y: (loaded.length / totalCount) * 100 },
   ];
   return (
-    <VictoryChart theme={VictoryTheme.material} width={800}>
+    <>
+    {
+      loaded.length ? 
+      <VictoryChart theme={VictoryTheme.material} width={800}>
       <VictoryArea
         width={800}
         labels={({ datum }) => Math.ceil(datum.y) + "%"}
@@ -35,7 +39,9 @@ function Load() {
         }}
         data={data}
       />
-    </VictoryChart>
+    </VictoryChart> : <Loading />
+    }
+    </>
   );
 }
 

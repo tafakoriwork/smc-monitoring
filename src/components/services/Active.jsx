@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import { _actives, _inactives } from "../redux/serviceSlice";
+import Loading from "../tools/Loading";
 
 function Active() {
   const actives = useSelector(_actives);
@@ -9,7 +10,8 @@ function Active() {
   const totalCount = actives.length + inactives.length;
   const data = [{ x: "active", y: (actives.length / totalCount) * 100 },{ x: "inactive", y: (inactives.length / totalCount) * 100 },];
   return (
-    <VictoryChart theme={VictoryTheme.material} width={800}>
+    <>
+    {actives.length ? <VictoryChart theme={VictoryTheme.material} width={800}>
       <VictoryArea
         width={800}
         labels={({ datum }) => Math.ceil(datum.y) + "%"}
@@ -29,7 +31,8 @@ function Active() {
         }}
         data={data}
       />
-    </VictoryChart>
+    </VictoryChart> : <Loading />}
+    </>
   );
 }
 

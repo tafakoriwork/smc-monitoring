@@ -17,6 +17,7 @@ import {
   TotalSentBandwidth,
   Metric,
 } from "../../redux/nicStates";
+import Loading from "../../tools/Loading";
 function __Metric() {
   const APIUrl = useSelector(apiUrl);
   const [reload, setReload] = useState(0);
@@ -40,7 +41,7 @@ function __Metric() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
-        cancelToken: source3.token
+        cancelToken: source3.token,
       })
       .then((response) => response.data)
       .then((data) => {
@@ -52,7 +53,12 @@ function __Metric() {
         let current_sent_bandwidth = ndata["current sent bandwidth"];
         let metric = ndata["metric"];
         if (total_received_bandwidth) {
-          dispatch(setCurrentSentBandwidth([..._CurrentSentBandwidth, { x: n, y: metric }]));
+          dispatch(
+            setCurrentSentBandwidth([
+              ..._CurrentSentBandwidth,
+              { x: n, y: metric },
+            ])
+          );
           dispatch(
             setCurrentReceivedBandwidth([
               ..._CurrentReceivedBandwidth,
@@ -87,23 +93,23 @@ function __Metric() {
   useEffect(() => {
     smcRequest();
 
-     if (localStorage.getItem("_pre") !== selected_borwser.id) {
-      source3.cancel('Operation canceled by the user.');
+    if (localStorage.getItem("_pre") !== selected_borwser.id) {
+      source3.cancel("Operation canceled by the user.");
       dispatch(setCurrentSentBandwidth([]));
       dispatch(setCurrentReceivedBandwidth([]));
       dispatch(setTotalReceivedBandwidth([]));
       dispatch(setTotalSentBandwidth([]));
       dispatch(setMetric([]));
       setReload(Math.random());
-    } 
+    }
     localStorage.setItem("_pre", selected_borwser.id);
   }, [reload]);
-  
+
   const getMin = () => {
     return Math.ceil(Math.min(..._Metric.map((item) => item.y)));
   };
   const getMax = () => {
-    return  Math.ceil(Math.max(..._Metric.map((item) => item.y)));
+    return Math.ceil(Math.max(..._Metric.map((item) => item.y)));
   };
   const getAvg = () => {
     var total = 0;
@@ -113,35 +119,40 @@ function __Metric() {
     return Math.ceil(total / _Metric.length);
   };
 
-
   return (
     <>
-      <div className="row justify-content-between">
-        <div className="col">Min: {getMin()}</div>
-        <div className="col">Max: {getMax()}</div>
-        <div className="col">Avg: {getAvg()}</div>
-      </div>
-    <VictoryChart theme={VictoryTheme.material} width={800}>
-      <VictoryArea
-        width={800}
-        labels={({ datum }) => Math.ceil(datum.y)}
-        domain={{ y: [getMin(), getMax()] }}
-        style={{
-          data: {
-            stroke: "darkblue",
-            strokeWidth: 0.5,
-            fill: "darkblue",
-            fillOpacity: "0.1",
-          },
-          parent: { border: "1px solid #ccc" },
-          labels: {
-            fontSize: 12,
-            fill: "darkblue",
-          },
-        }}
-        data={_Metric}
-      />
-    </VictoryChart>
+      {_Metric.length ? (
+        <div>
+          <div className="row justify-content-between">
+            <div className="col">Min: {getMin()}</div>
+            <div className="col">Max: {getMax()}</div>
+            <div className="col">Avg: {getAvg()}</div>
+          </div>
+          <VictoryChart theme={VictoryTheme.material} width={800}>
+            <VictoryArea
+              width={800}
+              labels={({ datum }) => Math.ceil(datum.y)}
+              domain={{ y: [0, getMax() * 2] }}
+              style={{
+                data: {
+                  stroke: "darkblue",
+                  strokeWidth: 0.5,
+                  fill: "darkblue",
+                  fillOpacity: "0.1",
+                },
+                parent: { border: "1px solid #ccc" },
+                labels: {
+                  fontSize: 12,
+                  fill: "darkblue",
+                },
+              }}
+              data={_Metric}
+            />
+          </VictoryChart>
+        </div>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 }

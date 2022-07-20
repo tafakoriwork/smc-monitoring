@@ -160,11 +160,11 @@ function ServicesTable(props) {
 
   useEffect(() => {
     checkFilter();
-  }, [ActiveFilters, SubFilters, LoadFilters]);
+  }, [ActiveFilters, SubFilters, LoadFilters, services]);
 
   return (
     <>
-      <table className="table" style={{ minHeight: "200px" }}>
+      <table className="table" style={{ maxHeight: "100px" }}>
         <thead>
           <tr>
             <th className="border">#</th>

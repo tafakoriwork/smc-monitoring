@@ -4,27 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import global from "../../config/global";
 import {
-  information,
-  setInformation,
-  setspeedInformation,
-  shiftInformation,
-  shiftspeedInformation,
-  speedInformation,
-} from "../../redux/cpuStates";
+    _available,
+    setUsed,
+    setAvailable
+} from "../../redux/lunStates";
 import { apiUrl, nodeIp, selectedBrowser } from "../../redux/routingSlice";
-import Loading from "../../tools/Loading";
-function VChart() {
+function Available() {
   const [reload, setReload] = useState(0);
-  var d = new Date();
   const dispatch = useDispatch();
-  const inf = useSelector(information);
-  const speedinf = useSelector(speedInformation);
+  const _available_ = useSelector(_available);
   const nodeIP = useSelector(nodeIp);
   const APIUrl = useSelector(apiUrl);
   const selected_borwser = useSelector(selectedBrowser);
-  const CancelToken1 = axios.CancelToken;
-  const source1 = CancelToken1.source();
-  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_usage`);
+  const [diagram_obj, setDiagramObj] = useState([]);
+  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_available`);
 
   const getMin = () => {
     if (sessionDatas) {
@@ -62,73 +55,73 @@ function VChart() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
-        cancelToken: source1.token,
       })
       .then((response) => response.data)
       .then((data) => {
-        const ndata = data.Result["SMC-SL Result"].result;
-        var n = d.toLocaleTimeString();
-
-        if (ndata["cpu usage"] >= 0) {
-          let cpuUsage = Math.ceil(ndata["cpu usage"]);
-
+        const ndata = data.Result["SMC-SL Result"].result[0];
+        dispatch(setAvailable(
+          {
+            size: ndata['available'],
+            type: ndata['available type'],
+          }));
+        dispatch(setUsed( {
+          size: ndata['used size'],
+          type: ndata['used type'],
+        }));
+        let availableFromStorage;
           const getFromStorage = sessionStorage.getItem(
-            `${selected_borwser.id}_speed`
+            `${selected_borwser.id}_available`
           );
-          let speedFromStorage;
-          if (getFromStorage) speedFromStorage = getFromStorage.split(",");
-          else speedFromStorage = [];
-          sessionStorage.setItem(`${selected_borwser.id}_speed`, [
-            ...speedFromStorage,
-            Math.ceil(ndata["cpu current speed"]),
-          ]);
-          let usageFromStorage;
-          const getFromStorage2 = sessionStorage.getItem(
-            `${selected_borwser.id}_usage`
-          );
-          if (getFromStorage2) usageFromStorage = getFromStorage2.split(",");
-          else usageFromStorage = [];
-          sessionStorage.setItem(`${selected_borwser.id}_usage`, [
-            ...usageFromStorage,
-            cpuUsage,
+          if (getFromStorage) availableFromStorage = getFromStorage.split(",");
+          else availableFromStorage = [];
+          sessionStorage.setItem(`${selected_borwser.id}_available`, [
+            ...availableFromStorage,
+            ndata['available'],
           ]);
 
-          dispatch(setInformation([...inf, { x: n, y: cpuUsage }]));
-          dispatch(
-            setspeedInformation([
-              ...speedinf,
-              { x: n, y: Math.ceil(ndata["cpu current speed"]) },
-            ])
+          let usedFromStorage;
+          const getFromStorage2 = sessionStorage.getItem(
+            `${selected_borwser.id}_used`
           );
-          if (inf.length == 6) {
-            dispatch(shiftInformation());
-            dispatch(shiftspeedInformation());
-          }
-        }
-        setReload(Math.random());
+          if (getFromStorage2) usedFromStorage = getFromStorage2.split(",");
+          else usedFromStorage = [];
+          sessionStorage.setItem(`${selected_borwser.id}_used`, [
+            ...usedFromStorage,
+            ndata['used size'],
+          ]);
+
+          setReload(Math.random());
       })
       .catch((error) => {
         const ndata = error;
       });
   };
+
+  function diagramMaker() {
+    const d = new Date();
+    const n = d.toLocaleTimeString();
+    if(_available_?.size)
+    setDiagramObj([...diagram_obj, { x: n, y: _available_?.size }]);
+    if (diagram_obj.length > 6) {
+      const temp = diagram_obj;
+      temp.splice(0, 1);
+      setDiagramObj(temp);
+    }
+  }
+
   useEffect(() => {
     smcRequest();
-
     if (localStorage.getItem("_pre") !== selected_borwser.id) {
-      source1.cancel("Operation canceled by the user.");
-      dispatch(setInformation([]));
-      dispatch(setspeedInformation([]));
+      dispatch(setAvailable(null));
+      dispatch(setUsed(null));
       setReload(Math.random());
     }
     localStorage.setItem("_pre", selected_borwser.id);
-   
+    diagramMaker();
   }, [reload]);
 
   return (
     <>
-      {
-        inf.length ? 
-        <div>
       <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
         <div className="col">Max: {getMax()}</div>
@@ -137,8 +130,8 @@ function VChart() {
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
-          labels={({ datum }) => Math.ceil(datum.y) + "%"}
-          domain={{ y: [0, 100] }}
+          labels={({ datum }) => Math.ceil(datum.y) + _available_?.type}
+          domain={{ y: [0, getMax() * 2] }}
           style={{
             data: {
               stroke: "darkblue",
@@ -152,13 +145,11 @@ function VChart() {
               fill: "darkblue",
             },
           }}
-          data={inf}
+          data={diagram_obj}
         />
       </VictoryChart>
-      </div> : <Loading />
-      }
     </>
   );
 }
 
-export default VChart;
+export default Available;

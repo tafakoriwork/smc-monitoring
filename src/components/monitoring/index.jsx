@@ -14,6 +14,11 @@ import NIC from "./NIC";
 import CORE from "./CORE";
 import OSDs from "./OSD/OSDs";
 import OSD from "./OSD";
+import POOLs from "./POOL/POOLs";
+import POOL from "./POOL";
+import RAM from "./RAM";
+import LUN from "./LUN";
+import LUNs from "./LUN/LUNs";
 function Monitoring(props) {
   const dispatch = useDispatch();
   const isCurrent = (tab) => props.current_tab.type === tab;
@@ -72,6 +77,7 @@ function Monitoring(props) {
       >
         {isCurrent("CORE") && <CORE />}
         {isCurrent("CPU") && <CPU />}
+        {isCurrent("RAM") && <RAM />}
         {isCurrent("CPUS") && <CPUs />}
         {isCurrent("HDD") && <HDD />}
         {isCurrent("HDDS") && <HDDs />}
@@ -83,6 +89,10 @@ function Monitoring(props) {
         {isCurrent("NIC") && <NIC />}
         {isCurrent("OSDs") && <OSDs />}
         {isCurrent("OSD") && <OSD />}
+        {isCurrent("POOLs") && <POOLs />}
+        {isCurrent("POOL") && <POOL />}
+        {isCurrent("LUNs") && <LUNs />}
+        {isCurrent("LUN") && <LUN />}
       </div>
     </div>
   );

@@ -1,20 +1,23 @@
-
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
-import { speedInformation } from "../../redux/cpuStates";
 import { selectedBrowser } from "../../redux/routingSlice";
-import Loading from "../../tools/Loading";
-
-function CPUSpeed() {
-  var inf = useSelector(speedInformation);
+import {
+  _Available,
+} from "../../redux/poolStates";
+import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
+function AvailablePercentage() {
   const selected_borwser = useSelector(selectedBrowser);
-  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_speed`);
- 
+  const available = useSelector(_Available);
+  const [diagram_obj, setDiagramObj] = useState([]);
+  const sessionDatas = sessionStorage.getItem(
+    `${selected_borwser.id}_availablepercentage`
+  );
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
       return Number(Math.min(...sesstionData.map((item) => item)));
-    }return 0;
+    }
+    return 0;
   };
 
   const getMax = () => {
@@ -32,14 +35,30 @@ function CPUSpeed() {
       for (var i = 0; i < sesstionData.length; i++) {
         total = Number(sesstionData[i]) + total;
       }
-      return parseFloat(total / ( sesstionData.length)).toFixed(2);
-    } return 0;
+      return parseFloat(total / sesstionData.length).toFixed(2);
+    }
+    return 0;
   };
+
+  function diagramMaker() {
+    const d = new Date();
+    const n = d.toLocaleTimeString();
+    available.percentage !== null &&
+      setDiagramObj([...diagram_obj, { x: n, y: available.percentage }]);
+    if(diagram_obj.length >= 6)
+    {
+      const temp = diagram_obj;
+      temp.splice(0, 1);
+      setDiagramObj(temp);
+    }
+  }
+
+  useEffect(() => {
+    diagramMaker();
+  }, [available]);
+
   return (
     <>
-      {
-        inf.length ? 
-        <div>
       <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
         <div className="col">Max: {getMax()}</div>
@@ -48,30 +67,26 @@ function CPUSpeed() {
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
-          labels={({ datum }) => Math.ceil(datum.y)}
-          domain={{ y: [0, getMax() * 2] }}
-          domainPadding={20}
+          labels={({ datum }) => datum.y + '%'}
+          domain={{ y: [0, 100] }}
           style={{
             data: {
-              stroke: "teal",
+              stroke: "darkblue",
               strokeWidth: 0.5,
-              fill: "green",
+              fill: "darkblue",
               fillOpacity: "0.1",
             },
             parent: { border: "1px solid #ccc" },
             labels: {
               fontSize: 12,
-              fill: "teal",
+              fill: "darkblue",
             },
           }}
-          data={inf}
+          data={diagram_obj}
         />
       </VictoryChart>
-      </div>
-      : <Loading />
-      }
     </>
   );
 }
 
-export default CPUSpeed;
+export default AvailablePercentage;

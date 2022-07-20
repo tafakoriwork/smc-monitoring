@@ -5,6 +5,7 @@ import {
   _Total,
 } from "../../redux/osdStates";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
+import Loading from "../../tools/Loading";
 function Total() {
   const selected_borwser = useSelector(selectedBrowser);
   const total = useSelector(_Total);
@@ -52,7 +53,6 @@ function Total() {
     temp.splice(0, 1);
     setDiagramObj(temp);
     }
-    console.log(diagram_obj);
   }
 
   useEffect(() => {
@@ -61,7 +61,8 @@ function Total() {
 
   return (
     <>
-      <div className="row justify-content-between">
+    {diagram_obj.length ? <div>
+    <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
         <div className="col">Max: {getMax()}</div>
         <div className="col">Avg: {getAvg()}</div>
@@ -69,8 +70,8 @@ function Total() {
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
-          labels={({ datum }) => Math.ceil(datum.y) + Total.type}
-          domain={{ y: [getMin(), getMax()] }}
+          labels={({ datum }) => Math.ceil(datum.y) + total.type}
+          domain={{ y: [0, getMax() * 2] }}
           style={{
             data: {
               stroke: "darkblue",
@@ -87,6 +88,7 @@ function Total() {
           data={diagram_obj}
         />
       </VictoryChart>
+    </div> : <Loading />}
     </>
   );
 }

@@ -1,22 +1,19 @@
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { reloader, usedSize } from "../../redux/hddstates";
-
-import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import { selectedBrowser } from "../../redux/routingSlice";
-import { useEffect } from "react";
+import { _Total } from "../../redux/poolStates";
+import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import Loading from "../../tools/Loading";
-function UsedSize() {
-  const usedsize = useSelector(usedSize);
-  const reload = useSelector(reloader);
+function Total() {
   const selected_borwser = useSelector(selectedBrowser);
-  const sessionDatas = sessionStorage.getItem(
-    `${selected_borwser.id}_usedsize`
-  );
+  const total = useSelector(_Total);
+  const [diagram_obj, setDiagramObj] = useState([]);
+  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_total`);
 
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Math.min(...sesstionData.map((item) => item));
+      return Number(Math.min(...sesstionData.map((item) => item)));
     }
     return 0;
   };
@@ -24,7 +21,7 @@ function UsedSize() {
   const getMax = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Math.max(...sesstionData.map((item) => item));
+      return Number(Math.max(...sesstionData.map((item) => item)));
     }
     return 0;
   };
@@ -41,35 +38,50 @@ function UsedSize() {
     return 0;
   };
 
-  useEffect(() => {}, [reload]);
+  function diagramMaker() {
+    const d = new Date();
+    const n = d.toLocaleTimeString();
+    if (total.size !== null)
+      setDiagramObj([...diagram_obj, { x: n, y: total.size }]);
+    if (diagram_obj.length >= 6) {
+      const temp = diagram_obj;
+      temp.splice(0, 1);
+      setDiagramObj(temp);
+    }
+  }
+
+  useEffect(() => {
+    diagramMaker();
+  }, [total]);
+
   return (
     <>
-      {usedSize.length ? (
+      {diagram_obj.length ? (
         <div>
           <div className="row justify-content-between">
-            <div className="col">Min: {getMin()} GB</div>
-            <div className="col">Max: {getMax()} GB</div>
-            <div className="col">Avg: {getAvg()} GB</div>
+            <div className="col">Min: {getMin()}</div>
+            <div className="col">Max: {getMax()}</div>
+            <div className="col">Avg: {getAvg()}</div>
           </div>
           <VictoryChart theme={VictoryTheme.material} width={800}>
             <VictoryArea
               width={800}
-              labels={({ datum }) => Math.ceil(datum.y) + "GB"}
+              labels={({ datum }) => Math.ceil(datum.y) + total.type}
               domain={{ y: [0, getMax() * 2] }}
               style={{
                 data: {
-                  stroke: "lightblue",
+                  stroke: "darkblue",
                   strokeWidth: 0.5,
-                  fill: "purple",
-                  fillOpacity: 0.3,
+                  fill: "darkblue",
+                  fillOpacity: "0.1",
                 },
                 parent: { border: "1px solid #ccc" },
                 labels: {
                   fontSize: 12,
-                  fill: "purple",
+                  fill: "darkblue",
                 },
               }}
-              data={usedsize}
+              data={diagram_obj}
             />
           </VictoryChart>
         </div>
@@ -80,4 +92,4 @@ function UsedSize() {
   );
 }
 
-export default UsedSize;
+export default Total;

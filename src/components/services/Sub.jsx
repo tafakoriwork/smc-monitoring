@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import {
@@ -8,6 +9,7 @@ import {
   _inactives,
   _runnings,
 } from "../redux/serviceSlice";
+import Loading from "../tools/Loading";
 
 function Sub() {
   const exited = useSelector(_exiteds);
@@ -19,8 +21,12 @@ function Sub() {
     { x: "dead", y: (dead.length / totalCount) * 100 },
     { x: "running", y: (running.length / totalCount) * 100 },
   ];
+
   return (
-    <VictoryChart theme={VictoryTheme.material} width={800}>
+    <>
+    {
+      dead.length ? 
+      <VictoryChart theme={VictoryTheme.material} width={800}>
       <VictoryArea
         width={800}
         labels={({ datum }) => Math.ceil(datum.y) + "%"}
@@ -40,7 +46,9 @@ function Sub() {
         }}
         data={data}
       />
-    </VictoryChart>
+    </VictoryChart> : <Loading />
+    }
+    </>
   );
 }
 

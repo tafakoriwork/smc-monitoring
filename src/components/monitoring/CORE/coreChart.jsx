@@ -16,6 +16,7 @@ import {
   nodeIp,
   selectedBrowser,
 } from "../../redux/routingSlice";
+import Loading from "../../tools/Loading";
 function COREChart() {
   const [reload, setReload] = useState(0);
   var d = new Date();
@@ -127,6 +128,9 @@ function COREChart() {
 
   return (
     <>
+      {
+        inf.length ? 
+        <div>
       <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
         <div className="col">Max: {getMax()}</div>
@@ -136,7 +140,7 @@ function COREChart() {
         <VictoryArea
           width={800}
           labels={({ datum }) => Math.ceil(datum.y) + "%"}
-          domain={{ y: [getMin(), getMax()] }}
+          domain={{ y: [0, 100] }}
           style={{
             data: {
               stroke: "darkblue",
@@ -153,6 +157,8 @@ function COREChart() {
           data={inf}
         />
       </VictoryChart>
+      </div> : <Loading />
+      }
     </>
   );
 }

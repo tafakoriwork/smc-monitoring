@@ -5,18 +5,19 @@ import {
   _Used,
 } from "../../redux/osdStates";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
+import Loading from "../../tools/Loading";
 function Used() {
   const selected_borwser = useSelector(selectedBrowser);
   const used = useSelector(_Used);
   const [diagram_obj, setDiagramObj] = useState([]);
   const sessionDatas = sessionStorage.getItem(
-    `${selected_borwser.id}_Used`
+    `${selected_borwser.id}_used`
   );
 
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Number(Math.min(...sesstionData.map((item) => item)));
+      return (Math.min(...sesstionData.map((item) => item))).toFixed(2);
     }
     return 0;
   };
@@ -24,7 +25,7 @@ function Used() {
   const getMax = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Number(Math.max(...sesstionData.map((item) => item)));
+      return (Math.max(...sesstionData.map((item) => item))).toFixed(2);
     }
     return 0;
   };
@@ -44,7 +45,7 @@ function Used() {
   function diagramMaker() {
     const d = new Date();
     const n = d.toLocaleTimeString();
-    used.size &&
+    used.size !== undefined &&
       setDiagramObj([...diagram_obj, { x: n, y: used.size }]);
     if(diagram_obj.length >= 6)
     {
@@ -56,11 +57,14 @@ function Used() {
 
   useEffect(() => {
     diagramMaker();
-  }, [used]);
+  }, [used.size, selected_borwser]);
 
   return (
     <>
-      <div className="row justify-content-between">
+     {
+      diagram_obj.length ? 
+      <div>
+     <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
         <div className="col">Max: {getMax()}</div>
         <div className="col">Avg: {getAvg()}</div>
@@ -68,8 +72,8 @@ function Used() {
       <VictoryChart theme={VictoryTheme.material} width={800}>
         <VictoryArea
           width={800}
-          labels={({ datum }) => Math.ceil(datum.y) + Used.type}
-          domain={{ y: [Number(getMin()), Number(getMax())] }}
+          labels={({ datum }) => Math.ceil(datum.y) + used.type}
+          domain={{ y: [0, Number(getMax()) * 2] }}
           style={{
             data: {
               stroke: "darkblue",
@@ -86,6 +90,9 @@ function Used() {
           data={diagram_obj}
         />
       </VictoryChart>
+     </div>
+     : <Loading />
+     }
     </>
   );
 }

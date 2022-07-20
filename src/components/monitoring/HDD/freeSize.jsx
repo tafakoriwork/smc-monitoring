@@ -12,6 +12,7 @@ import global from "../../config/global";
 import {
   freeSize,
   setFreeSize,
+  setFS,
   setMounted,
   setTotalSize,
   setUsedSize,
@@ -19,9 +20,10 @@ import {
   totalSize,
   usedSize,
 } from "../../redux/hddstates";
+import Loading from "../../tools/Loading";
 function FreeSize() {
   const APIUrl = useSelector(apiUrl);
-  const [reload, setReload] = useState(0);
+  const [reload, setReload] = useState(Math.random());
   var d = new Date();
   const dispatch = useDispatch();
   const freesize = useSelector(freeSize);
@@ -29,16 +31,16 @@ function FreeSize() {
   const usedsize = useSelector(usedSize);
   const nodeIP = useSelector(nodeIp);
   const selected_borwser = useSelector(selectedBrowser);
-  const CancelToken2 = axios.CancelToken;
-  const source2 = CancelToken2.source();
+  const sessionDatas = sessionStorage.getItem(
+    `${selected_borwser.id}_freesize`
+  );
 
-  const sessionDatas = sessionStorage.getItem(`${selected_borwser.id}_freesize`);
- 
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
       return Math.min(...sesstionData.map((item) => item));
-    }return 0;
+    }
+    return 0;
   };
 
   const getMax = () => {
@@ -56,10 +58,10 @@ function FreeSize() {
       for (var i = 0; i < sesstionData.length; i++) {
         total = Number(sesstionData[i]) + total;
       }
-      return parseFloat(total / ( sesstionData.length)).toFixed(2);
-    }return 0;
+      return parseFloat(total / sesstionData.length).toFixed(2);
+    }
+    return 0;
   };
-
 
   const smcRequest = () => {
     axios
@@ -70,7 +72,6 @@ function FreeSize() {
           address: nodeIP,
           Authorization: `Bearer ${global.token}`,
         },
-        cancelToken: source2.token,
       })
       .then((response) => response.data)
       .then((data) => {
@@ -80,17 +81,16 @@ function FreeSize() {
         let used_size = ndata["used size"];
         let total_size = ndata["total size"];
         let mounted = ndata["mounted"];
-
-
+        let filesystem = ndata["filesystem"];
         const getFromStorage = sessionStorage.getItem(
-          `${selected_borwser.id}_speed`
+          `${selected_borwser.id}_freesize`
         );
         let freesizeFromStorage;
         if (getFromStorage) freesizeFromStorage = getFromStorage.split(",");
         else freesizeFromStorage = [];
         sessionStorage.setItem(`${selected_borwser.id}_freesize`, [
           ...freesizeFromStorage,
-          global.byteToGigaByte(free_size)
+          global.byteToGigaByte(free_size),
         ]);
 
         let usedsizeFromStorage;
@@ -101,7 +101,7 @@ function FreeSize() {
         else usedsizeFromStorage = [];
         sessionStorage.setItem(`${selected_borwser.id}_usedsize`, [
           ...usedsizeFromStorage,
-          global.byteToGigaByte(used_size)
+          global.byteToGigaByte(used_size),
         ]);
 
         let totalsizeFromStorage;
@@ -114,7 +114,6 @@ function FreeSize() {
           ...totalsizeFromStorage,
           global.byteToGigaByte(total_size),
         ]);
-
 
         if (free_size) {
           dispatch(
@@ -135,9 +134,8 @@ function FreeSize() {
               { x: n, y: global.byteToGigaByte(total_size) },
             ])
           );
-          dispatch(
-            setMounted(mounted)
-          );
+          dispatch(setMounted(mounted));
+          dispatch(setFS(filesystem));
         }
         if (freesize.length == 4) {
           dispatch(shiftAll());
@@ -148,55 +146,52 @@ function FreeSize() {
         const ndata = error;
       });
   };
+
   useEffect(() => {
     smcRequest();
-
     if (localStorage.getItem("_pre") !== selected_borwser.id) {
-      source2.cancel("Operation canceled by the user.");
       dispatch(setFreeSize([]));
       dispatch(setUsedSize([]));
       dispatch(setTotalSize([]));
-      setTimeout(() => {
-        setReload(Math.random());
-      }, 2000);
+      setReload(Math.random());
     }
     localStorage.setItem("_pre", selected_borwser.id);
   }, [reload]);
 
-
-
-
-
-  
-
   return (
     <>
-      <div className="row justify-content-between">
-        <div className="col">Min: {getMin()} GB</div>
-        <div className="col">Max: {getMax()} GB</div>
-        <div className="col">Avg: {getAvg()} GB</div>
+      {
+        freesize.length ? 
+        <div>
+        <div className="row justify-content-between">
+          <div className="col">Min: {getMin()} GB</div>
+          <div className="col">Max: {getMax()} GB</div>
+          <div className="col">Avg: {getAvg()} GB</div>
+        </div>
+        <VictoryChart theme={VictoryTheme.material} width={800}>
+          <VictoryArea
+            width={800}
+            labels={({ datum }) => Math.ceil(datum.y) + "GB"}
+            domain={{ y: [0, getMax() * 2] }}
+            style={{
+              data: {
+                stroke: "darkblue",
+                strokeWidth: 0.5,
+                fill: "darkblue",
+                fillOpacity: "0.1",
+              },
+              parent: { border: "1px solid #ccc" },
+              labels: {
+                fontSize: 12,
+                fill: "darkblue",
+              },
+            }}
+            data={freesize}
+          />
+        </VictoryChart>
       </div>
-      <VictoryChart theme={VictoryTheme.material} width={800}>
-        <VictoryArea
-          width={800}
-          labels={({ datum }) => Math.ceil(datum.y) + "GB"}
-          domain={{ y: [getMin(), getMax()] }}
-          style={{
-            data: {
-              stroke: "darkblue",
-              strokeWidth: 0.5,
-              fill: "darkblue",
-              fillOpacity: "0.1",
-            },
-            parent: { border: "1px solid #ccc" },
-            labels: {
-              fontSize: 12,
-              fill: "darkblue",
-            },
-          }}
-          data={freesize}
-        />
-      </VictoryChart>
+      : <Loading />
+      }
     </>
   );
 }

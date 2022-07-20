@@ -1,22 +1,22 @@
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { reloader, totalSize } from "../../redux/hddstates";
-
-import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import { selectedBrowser } from "../../redux/routingSlice";
-import { useEffect } from "react";
+import { _pool_min, _Reloader } from "../../redux/poolStates";
+import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
 import Loading from "../../tools/Loading";
-function TotalSize() {
-  const totalsize = useSelector(totalSize);
-  const reload = useSelector(reloader);
+function PoolMin() {
   const selected_borwser = useSelector(selectedBrowser);
-  const sessionDatas = sessionStorage.getItem(
-    `${selected_borwser.id}_totalsize`
-  );
+  const pool_min_size = useSelector(_pool_min);
+  const reloader = useSelector(_Reloader);
 
+  const [diagram_obj, setDiagramObj] = useState([]);
+  const sessionDatas = sessionStorage.getItem(
+    `${selected_borwser.id}_poolsize`
+  );
   const getMin = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Math.min(...sesstionData.map((item) => item));
+      return Number(Math.min(...sesstionData.map((item) => item)));
     }
     return 0;
   };
@@ -24,7 +24,7 @@ function TotalSize() {
   const getMax = () => {
     if (sessionDatas) {
       const sesstionData = sessionDatas.split(",");
-      return Math.max(...sesstionData.map((item) => item));
+      return Number(Math.max(...sesstionData.map((item) => item)));
     }
     return 0;
   };
@@ -41,28 +41,43 @@ function TotalSize() {
     return 0;
   };
 
-  useEffect(() => {}, [reload]);
+  function diagramMaker() {
+    const d = new Date();
+    const n = d.toLocaleTimeString();
+    if (pool_min_size !== null)
+      setDiagramObj([...diagram_obj, { x: n, y: pool_min_size }]);
+    if (diagram_obj.length >= 6) {
+      const temp = diagram_obj;
+      temp.splice(0, 1);
+      setDiagramObj(temp);
+    }
+  }
+
+  useEffect(() => {
+    diagramMaker();
+  }, [reloader]);
 
   return (
     <>
       {
-        totalsize.length ?
+        diagram_obj.length ? 
         <div>
         <div className="row justify-content-between">
-          <div className="col">Min: {getMin()} GB</div>
-          <div className="col">Max: {getMax()} GB</div>
-          <div className="col">Avg: {getAvg()} GB</div>
+          <div className="col">Min: {getMin()}</div>
+          <div className="col">Max: {getMax()}</div>
+          <div className="col">Avg: {getAvg()}</div>
         </div>
         <VictoryChart theme={VictoryTheme.material} width={800}>
           <VictoryArea
             width={800}
-            labels={({ datum }) => Math.ceil(datum.y) + "GB"}
+            labels={({ datum }) => datum.y}
             domain={{ y: [0, getMax() * 2] }}
             style={{
               data: {
-                stroke: "lightblue",
+                stroke: "darkblue",
                 strokeWidth: 0.5,
-                fill: "lightblue",
+                fill: "darkblue",
+                fillOpacity: "0.1",
               },
               parent: { border: "1px solid #ccc" },
               labels: {
@@ -70,14 +85,13 @@ function TotalSize() {
                 fill: "darkblue",
               },
             }}
-            data={totalsize}
+            data={diagram_obj}
           />
         </VictoryChart>
-      </div>
-      : <Loading />
+      </div> : <Loading />
       }
     </>
   );
 }
 
-export default TotalSize;
+export default PoolMin;

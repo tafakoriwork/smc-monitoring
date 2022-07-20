@@ -12,6 +12,7 @@ import {
   _Available,
 } from "../../redux/osdStates";
 import { VictoryArea, VictoryChart, VictoryTheme } from "victory";
+import Loading from "../../tools/Loading";
 function Available() {
   const APIUrl = useSelector(apiUrl);
   const nodeIP = useSelector(nodeIp);
@@ -36,7 +37,7 @@ function Available() {
       .then((result) => result.data)
       .then((data) => {
         const ndata = data.Result["SMC-SL Result"]?.result[0];
-        if (ndata["id"]) {
+        if (ndata["class"]) {
           dispatch(
             setDetils({
               id: ndata["id"],
@@ -53,6 +54,18 @@ function Available() {
               type: ndata["used size type"],
             })
           );
+
+          let usedFromStorage;
+          const getFromStorage22 = sessionStorage.getItem(
+            `${selected_borwser.id}_used`
+          );
+          if (getFromStorage22)
+            usedFromStorage = getFromStorage22.split(",");
+          else usedFromStorage = [];
+          sessionStorage.setItem(`${selected_borwser.id}_used`, [
+            ...usedFromStorage,
+            ndata["used size"],
+          ]);
           
           let totalFromStorage;
           const getFromStorage = sessionStorage.getItem(
@@ -131,8 +144,8 @@ function Available() {
   function diagramMaker() {
     const d = new Date();
     const n = d.toLocaleTimeString();
-    available.size &&
-      setDiagramObj([...diagram_obj, { x: n, y: available.size }]);
+    !isNaN(available.size) &&
+      setDiagramObj([...diagram_obj, { x: n, y: Number(available.size) }]);
     if(diagram_obj.length >= 6)
     {
       const temp = diagram_obj;
@@ -144,10 +157,23 @@ function Available() {
   useEffect(() => {
     smcRequest();
     diagramMaker();
-  }, [reload]);
+    if (localStorage.getItem("_pre") !== selected_borwser?.id) {
+      dispatch(setDetils([]));
+      dispatch(setAvailable([]));
+      dispatch(setTotal([]));
+      dispatch(setUsed([]));
+      setReload(Math.random());
+      setDiagramObj([]);
+    }
+    localStorage.setItem("_pre", selected_borwser?.id);
+    
+  }, [reload, selected_borwser]);
 
   return (
     <>
+      {
+        diagram_obj.length ? 
+        <div>
       <div className="row justify-content-between">
         <div className="col">Min: {getMin()}</div>
         <div className="col">Max: {getMax()}</div>
@@ -157,7 +183,7 @@ function Available() {
         <VictoryArea
           width={800}
           labels={({ datum }) => Math.ceil(datum.y) + available.type}
-          domain={{ y: [Number(getMin()), Number(getMax())] }}
+          domain={{ y: [0, Number(getMax()) * 2] }}
           style={{
             data: {
               stroke: "darkblue",
@@ -174,6 +200,9 @@ function Available() {
           data={diagram_obj}
         />
       </VictoryChart>
+      </div>
+      : <Loading />
+      }
     </>
   );
 }
